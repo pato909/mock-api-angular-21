@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People Directory Mockup Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3efe8;
+      --surface: rgba(255, 252, 247, 0.82);
+      --surface-strong: #fffdf9;
+      --surface-muted: #f1ebe2;
+      --ink: #1f2327;
+      --ink-soft: #5f655f;
+      --line: rgba(38, 42, 46, 0.12);
+      --accent: #1c5c5e;
+      --accent-2: #9e6241;
+      --danger: #9f4d49;
+      --shadow: 0 20px 60px rgba(48, 42, 33, 0.14);
+      --shadow-soft: 0 10px 30px rgba(48, 42, 33, 0.08);
+      --content-width: 1340px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(28, 92, 94, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(158, 98, 65, 0.12), transparent 22%),
+        linear-gradient(180deg, #f6f2ea 0%, #f0ebe4 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+      pointer-events: none;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+    }
+
+    .page {
+      width: min(calc(100% - 48px), var(--content-width));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .masthead {
+      position: sticky;
+      top: 18px;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 252, 247, 0.72);
+      border: 1px solid rgba(34, 39, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+      border-radius: 999px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .brand, .masthead-actions, .toolbar-title, .search-box, .search-row, .action-set, .pagination-controls, .dialog-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand { gap: 14px; }
+
+    .brand-mark, .mini-avatar, .profile-avatar {
+      display: grid;
+      place-items: center;
+      color: #faf6ef;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), #173b3d);
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-copy small, .card-eyebrow, .screen-meta, .toolbar-note, .chip, .field label, th, .meta-term {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-soft);
+    }
+
+    .brand-copy strong, .toolbar-title strong, .screen-head strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .ghost-pill, .primary-pill, .danger-pill, .state-action {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .ghost-pill, .state-action {
+      background: rgba(28, 92, 94, 0.08);
+      color: var(--accent);
+    }
+
+    .primary-pill {
+      background: linear-gradient(135deg, var(--accent), #13383a);
+      color: #f9f6f1;
+      box-shadow: 0 14px 30px rgba(28, 92, 94, 0.2);
+    }
+
+    .danger-pill {
+      background: rgba(159, 77, 73, 0.1);
+      color: var(--danger);
+    }
+
+    .hero, .detail-layout, .states-grid {
+      display: grid;
+      gap: 28px;
+    }
+
+    .hero {
+      grid-template-columns: 1.05fr 0.95fr;
+      margin-bottom: 34px;
+    }
+
+    .hero-card, .screen, .state-card, .dialog-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      border-radius: 34px;
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -60px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(28, 92, 94, 0.18), transparent 68%);
+    }
+
+    .hero-card.alt::after {
+      background: radial-gradient(circle, rgba(158, 98, 65, 0.18), transparent 70%);
+      right: -48px;
+      top: auto;
+      bottom: -50px;
+    }
+
+    h1, h2, h3, .state-card h4 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    h1 { font-size: clamp(58px, 8vw, 92px); margin-bottom: 14px; }
+    h2 { font-size: clamp(38px, 4vw, 54px); margin-bottom: 10px; }
+    h3 { font-size: 30px; margin-bottom: 12px; }
+    .state-card h4 { font-size: 28px; margin-bottom: 12px; }
+
+    p, .table td, .field .input, .dialog-body, .meta-description {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .hero-grid, .screen-grid, .detail-grid, .form-grid, .dl, .state-rows {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 28px; }
+    .screen-grid { gap: 22px; }
+    .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; }
+    .states-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+    .hero-stat, .info-card, .form-card, .state-card, .table-wrap, .detail-hero, .app-toolbar, .content-frame, .search-box {
+      border: 1px solid rgba(31, 35, 39, 0.08);
+      background: rgba(255, 253, 249, 0.88);
+    }
+
+    .hero-stat, .info-card, .state-card { border-radius: 20px; padding: 20px; }
+    .hero-stat strong { display: block; font-size: 24px; color: var(--ink); margin-bottom: 4px; }
+    .hero-stat span, .helper, .field .hint, .pagination, .name-cell span { color: var(--ink-soft); font-size: 13px; }
+
+    .section-header, .page-header, .pagination-row, .screen-head, .app-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+    }
+
+    .section-header { margin: 14px 0 16px; }
+    .section-header p, .page-header p, .detail-copy p, .state-card p { margin: 0; max-width: 620px; }
+
+    .screen {
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .screen-head {
+      padding: 18px 22px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 252, 247, 0.58);
+    }
+
+    .screen-body { padding: 22px; background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.1)); }
+    .app-shell { border-radius: 28px; padding: 16px; background: rgba(255, 252, 247, 0.62); border: 1px solid rgba(31, 35, 39, 0.08); }
+    .app-toolbar { border-radius: 22px; padding: 14px 16px; margin-bottom: 18px; }
+    .content-frame { border-radius: 24px; padding: 26px; }
+    .search-box { flex: 1; border-radius: 18px; padding: 15px 18px; min-height: 58px; }
+
+    .search-icon, .action, .pagination-dot {
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(31, 35, 39, 0.08);
+      background: rgba(255,255,255,0.78);
+    }
+
+    .search-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(28, 92, 94, 0.1);
+      color: var(--accent);
+      font-size: 15px;
+    }
+
+    .search-text { color: #79807b; font-size: 14px; }
+    .chip { border-radius: 999px; padding: 10px 14px; background: rgba(28, 92, 94, 0.08); color: var(--accent); white-space: nowrap; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 16px 14px; border-bottom: 1px solid rgba(31, 35, 39, 0.07); text-align: left; vertical-align: middle; }
+    th { background: rgba(247, 242, 234, 0.9); }
+    tr:last-child td { border-bottom: 0; }
+
+    .mini-avatar { width: 42px; height: 42px; border-radius: 50%; font-size: 13px; }
+    .profile-avatar { width: 104px; height: 104px; border-radius: 30px; font-size: 30px; box-shadow: 0 18px 30px rgba(28, 92, 94, 0.18); }
+    .name-cell strong { display: block; color: var(--ink); margin-bottom: 3px; }
+
+    .action, .pagination-dot { width: 34px; height: 34px; border-radius: 10px; font-size: 12px; font-weight: 800; }
+    .pagination-dot.active { background: var(--accent); color: #faf6ef; border-color: transparent; }
+    .pagination-row { align-items: center; margin-top: 14px; }
+
+    .detail-layout { grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr); gap: 18px; }
+    .detail-hero { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; border-radius: 22px; padding: 22px; margin-bottom: 18px; }
+
+    .dl { gap: 14px; }
+    .dl-row { display: grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: baseline; }
+    .meta-value { color: var(--ink); font-size: 15px; font-weight: 600; }
+
+    .form-shell { max-width: 860px; margin: 0 auto; }
+    .form-card { border-radius: 26px; padding: 26px; }
+    .field { display: grid; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    .field .input { min-height: 54px; padding: 15px 16px; border-radius: 16px; background: var(--surface-muted); display: flex; align-items: center; color: var(--ink); }
+    .avatar-preview {
+      min-height: 140px;
+      border-radius: 22px;
+      border: 1px dashed rgba(31, 35, 39, 0.16);
+      background: linear-gradient(135deg, rgba(28, 92, 94, 0.06), rgba(158, 98, 65, 0.05)), rgba(255, 253, 249, 0.88);
+      display: grid;
+      place-items: center;
+      color: var(--ink-soft);
+      font-size: 14px;
+      margin-top: 18px;
+    }
+    .form-actions { margin-top: 22px; display: flex; justify-content: flex-end; gap: 10px; }
+
+    .state-card { border-radius: 24px; padding: 24px; min-height: 220px; }
+    .state-rows { margin-top: 18px; }
+    .shimmer { height: 14px; border-radius: 999px; background: linear-gradient(90deg, rgba(31,35,39,0.06), rgba(31,35,39,0.14), rgba(31,35,39,0.06)); }
+
+    .dialog-wrap { display: flex; justify-content: center; padding-top: 4px; margin-top: 22px; }
+    .dialog-card { width: min(100%, 430px); border-radius: 28px; padding: 24px; }
+    .footnote { margin-top: 24px; color: var(--ink-soft); font-size: 13px; line-height: 1.7; }
+
+    @media (max-width: 1180px) {
+      .hero, .detail-layout, .states-grid, .detail-grid, .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">
+        <div class="brand-mark">PD</div>
+        <div class="brand-copy">
+          <small>Mockup Preview</small>
+          <strong>People Directory</strong>
+        </div>
+      </div>
+      <div class="masthead-actions">
+        <button class="ghost-pill">Visual Direction</button>
+        <button class="primary-pill">New person</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="hero-card">
+        <div class="card-eyebrow">Angular App Mockup</div>
+        <h1>Calm. Editorial. Operational.</h1>
+        <p>
+          Cette maquette visuelle montre l’identité de l’application avant toute implémentation Angular.
+          Le ton choisi est enterprise-premium : une interface métier propre, sérieuse, mais avec un vrai parti pris typographique et spatial.
+        </p>
+        <div class="hero-grid">
+          <div class="hero-stat">
+            <strong>List</strong>
+            <span>Vue dense, élégante, très lisible</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Detail</strong>
+            <span>Fiche profil dossier plus premium</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Forms</strong>
+            <span>Calmes, guidés, structurés</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="hero-card alt">
+        <div class="card-eyebrow">Visual Notes</div>
+        <h2>People Directory should not look like a default Angular Material starter.</h2>
+        <p>
+          Palette minérale, surfaces papier, accent profond, hiérarchie éditoriale, et composants métier qui restent sobres.
+          L’idée n’est pas d’avoir une app “fun”, mais une app clairement conçue.
+        </p>
+      </article>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <h2>App Shell + List Page</h2>
+        <p>La liste est la vue la plus opérationnelle. Elle doit être dense sans être froide, très claire sans ressembler à un simple tableau administratif.</p>
+      </div>
+      <div class="chip">Desktop-first mockup</div>
+    </section>
+
+    <section class="screen-grid">
+      <article class="screen">
+        <div class="screen-head">
+          <strong>Persons List</strong>
+          <span class="screen-meta">Shell + Search + Table + Pagination</span>
+        </div>
+        <div class="screen-body">
+          <div class="app-shell">
+            <div class="app-toolbar">
+              <div class="toolbar-title">
+                <div class="brand-mark" style="width:36px;height:36px;font-size:12px;">PD</div>
+                <div>
+                  <div class="toolbar-note">People Directory</div>
+                  <strong>Professional records, composed with clarity</strong>
+                </div>
+              </div>
+              <button class="primary-pill">New person</button>
+            </div>
+
+            <div class="content-frame">
+              <div class="page-header">
+                <div>
+                  <h3>People</h3>
+                  <p>Directory of persons, searchable and maintained through a MockAPI-backed records layer.</p>
+                </div>
+                <div class="chip">Sort: lastName ↑</div>
+              </div>
+
+              <div class="search-row">
+                <div class="search-box">
+                  <div class="search-icon">⌕</div>
+                  <div class="search-text">Search by name, email, or phone...</div>
+                </div>
+                <div class="chip">Debounced</div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Avatar</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Birth date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><div class="mini-avatar">SB</div></td>
+                      <td class="name-cell"><strong>Saul Berge-Frami</strong><span>Primary profile row</span></td>
+                      <td>Freda_Dicki@hotmail.com</td>
+                      <td>469-640-4835 x562</td>
+                      <td>28/06/2001</td>
+                      <td><div class="action-set"><div class="action">V</div><div class="action">E</div><div class="action" style="color:var(--danger)">D</div></div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="mini-avatar">PQ</div></td>
+                      <td class="name-cell"><strong>Pat Quitzon</strong><span>Secondary profile row</span></td>
+                      <td>Mackenzie_Green34@gmail.com</td>
+                      <td>(614) 859-9541</td>
+                      <td>11/02/2008</td>
+                      <td><div class="action-set"><div class="action">V</div><div class="action">E</div><div class="action" style="color:var(--danger)">D</div></div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="mini-avatar">JW</div></td>
+                      <td class="name-cell"><strong>Josianne Wilderman-Upton</strong><span>Longer-name stress test</span></td>
+                      <td>Winona_Hartmann@yahoo.com</td>
+                      <td>1-294-355-1063 x0242</td>
+                      <td>07/08/1972</td>
+                      <td><div class="action-set"><div class="action">V</div><div class="action">E</div><div class="action" style="color:var(--danger)">D</div></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="pagination-row">
+                <div class="pagination">Showing a calm, server-side paginated list view</div>
+                <div class="pagination-controls">
+                  <div class="pagination-dot">‹</div>
+                  <div class="pagination-dot active">1</div>
+                  <div class="pagination-dot">2</div>
+                  <div class="pagination-dot">3</div>
+                  <div class="pagination-dot">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <h2>Detail Page</h2>
+        <p>La fiche détail doit ressembler à un dossier profil bien composé, plus riche et plus identitaire que la liste.</p>
+      </div>
+      <div class="chip">Profile dossier</div>
+    </section>
+
+    <section class="screen-grid">
+      <article class="screen">
+        <div class="screen-head">
+          <strong>Person Detail</strong>
+          <span class="screen-meta">Hero + Main Info + Metadata</span>
+        </div>
+        <div class="screen-body">
+          <div class="content-frame">
+            <div class="page-header">
+              <div>
+                <div class="toolbar-note">&lt; Back to persons</div>
+                <h3>Profile dossier</h3>
+                <p>Identity-first detail view with clear separation between user-facing information and technical metadata.</p>
+              </div>
+              <div class="masthead-actions">
+                <button class="ghost-pill">Edit</button>
+                <button class="danger-pill">Delete</button>
+              </div>
+            </div>
+
+            <div class="detail-hero">
+              <div class="profile-avatar">SB</div>
+              <div class="detail-copy">
+                <h3 style="margin-bottom:10px;">Saul Berge-Frami</h3>
+                <p>Clean profile record synchronized with MockAPI, presented as a calm and premium dossier rather than a technical dump.</p>
+              </div>
+            </div>
+
+            <div class="detail-layout">
+              <div class="detail-grid">
+                <article class="info-card">
+                  <h4>Contact &amp; Personal Info</h4>
+                  <div class="dl">
+                    <div class="dl-row">
+                      <div class="meta-term">Email</div>
+                      <div class="meta-value">Freda_Dicki@hotmail.com</div>
+                    </div>
+                    <div class="dl-row">
+                      <div class="meta-term">Phone</div>
+                      <div class="meta-value">469-640-4835 x562</div>
+                    </div>
+                    <div class="dl-row">
+                      <div class="meta-term">Birth date</div>
+                      <div class="meta-value">28/06/2001</div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="info-card">
+                  <h4>Visual identity</h4>
+                  <p class="meta-description">The profile area should breathe more than the list and let typography carry the page tone.</p>
+                </article>
+              </div>
+
+              <article class="info-card">
+                <h4>Record Metadata</h4>
+                <div class="dl">
+                  <div class="dl-row">
+                    <div class="meta-term">ID</div>
+                    <div class="meta-value">1</div>
+                  </div>
+                  <div class="dl-row">
+                    <div class="meta-term">Created</div>
+                    <div class="meta-value">30/03/2026 08:10</div>
+                  </div>
+                  <div class="dl-row">
+                    <div class="meta-term">Updated</div>
+                    <div class="meta-value">29/03/2026 13:38</div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <h2>Create / Edit Form</h2>
+        <p>Le formulaire doit être calme, lisible et sûr. Il doit inspirer confiance, pas donner l’impression d’un écran CRUD brut.</p>
+      </div>
+      <div class="chip">Guided and composed</div>
+    </section>
+
+    <section class="screen-grid">
+      <article class="screen">
+        <div class="screen-head">
+          <strong>Create Person</strong>
+          <span class="screen-meta">Single large form card</span>
+        </div>
+        <div class="screen-body">
+          <div class="form-shell">
+            <div class="page-header">
+              <div>
+                <h3>Create Person</h3>
+                <p>Add a new person record to the directory with a calm, structured flow and strong editorial hierarchy.</p>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="form-grid">
+                <div class="field">
+                  <label>First name</label>
+                  <div class="input">Saul</div>
+                </div>
+                <div class="field">
+                  <label>Last name</label>
+                  <div class="input">Berge-Frami</div>
+                </div>
+                <div class="field">
+                  <label>Birth date</label>
+                  <div class="input">28 / 06 / 2001</div>
+                </div>
+                <div class="field">
+                  <label>Phone</label>
+                  <div class="input">469-640-4835 x562</div>
+                </div>
+                <div class="field full">
+                  <label>Email</label>
+                  <div class="input">Freda_Dicki@hotmail.com</div>
+                </div>
+                <div class="field full">
+                  <label>Avatar URL</label>
+                  <div class="input">https://avatars.githubusercontent.com/u/48803848</div>
+                  <div class="hint">URL validation and preview should feel integrated, not technical.</div>
+                </div>
+              </div>
+
+              <div class="avatar-preview">Avatar preview area</div>
+
+              <div class="form-actions">
+                <button class="ghost-pill">Cancel</button>
+                <button class="primary-pill">Create person</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <h2>System States + Dialog</h2>
+        <p>Même les états non-happy-path doivent rester composés et cohérents avec le ton premium de l’application.</p>
+      </div>
+      <div class="chip">Loading / Empty / Error / Not found</div>
+    </section>
+
+    <section class="screen-grid">
+      <article class="screen">
+        <div class="screen-head">
+          <strong>States and Confirmation</strong>
+          <span class="screen-meta">Non-happy paths should still feel designed</span>
+        </div>
+        <div class="screen-body">
+          <div class="states-grid">
+            <div class="state-card">
+              <div class="card-eyebrow">Loading</div>
+              <h4>Fetching the directory</h4>
+              <p>The shell remains stable while the table turns into elegant loading rows rather than a jarring blank page.</p>
+              <div class="state-rows">
+                <div class="shimmer"></div>
+                <div class="shimmer"></div>
+                <div class="shimmer"></div>
+                <div class="shimmer" style="width:82%;"></div>
+              </div>
+            </div>
+
+            <div class="state-card">
+              <div class="card-eyebrow">Empty</div>
+              <h4>No persons match this search</h4>
+              <p>The empty state should be calm and operational, with a single next action that helps the user recover.</p>
+              <div class="state-action">Clear search</div>
+            </div>
+
+            <div class="state-card">
+              <div class="card-eyebrow">Error</div>
+              <h4>We couldn't load the directory</h4>
+              <p>Failures should be explicit and clean, without exposing raw technical noise into the interface.</p>
+              <div class="state-action">Retry</div>
+            </div>
+          </div>
+
+          <div class="dialog-wrap">
+            <div class="dialog-card">
+              <div class="card-eyebrow">Confirmation Dialog</div>
+              <h3>Delete person?</h3>
+              <div class="dialog-body">This action will permanently remove Saul Berge-Frami from the directory.</div>
+              <div class="dialog-actions">
+                <button class="ghost-pill">Cancel</button>
+                <button class="danger-pill">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footnote">
+      Cette page est une maquette visuelle statique pour explorer le rendu global de l’application avant implémentation.
+      Elle sert de référence pour discuter de la direction artistique, de la hiérarchie des écrans et du ton produit.
+    </p>
+  </div>
+</body>
+</html>

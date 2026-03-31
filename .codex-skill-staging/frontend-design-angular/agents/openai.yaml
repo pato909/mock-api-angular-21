@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Design Angular"
+  short_description: "Create Angular 21 mockups only, ideally in Figma, without implementation"
+  default_prompt: "Use $frontend-design-angular to produce Angular 21 mockups only, preferably as Figma mockups when available, based on the product context and architecture, without generating any implementation code."

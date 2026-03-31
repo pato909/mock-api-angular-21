@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Coach"
+  short_description: "Explain how to build a feature step by step without implementing it"
+  default_prompt: "Use $feature-coach to explain a feature step by step, grounded in the project context, without implementing it, and answer follow-up questions clearly as the user progresses."

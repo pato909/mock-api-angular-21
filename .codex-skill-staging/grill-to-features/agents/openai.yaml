@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill To Features"
+  short_description: "Turn a grill-me.md into an ordered feature backlog and GitHub issues"
+  default_prompt: "Use $grill-to-features to transform a grill-me.md document into an ordered Markdown feature backlog with descriptions, acceptance criteria, and estimates, then add matching feature issues to GitHub when possible."

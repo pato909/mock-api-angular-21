@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Architecture"
+  short_description: "Design an Angular 21 app architecture document without implementing it"
+  default_prompt: "Use $angular-architecture to analyze the functional requirements of an Angular 21 application and produce a Markdown architecture document without implementing the app."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Expert"
+  short_description: "Strict Angular v20+ standards with signals and accessibility"
+  default_prompt: "Use $angular-expert to implement or review Angular code with strict TypeScript, standalone Angular v20+ APIs, signals, accessibility best practices, and a preference for httpResource() when it fits."
