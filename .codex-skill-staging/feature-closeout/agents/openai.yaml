@@ -1,4 +1,4 @@
 interface:
   display_name: "Feature Closeout"
-  short_description: "Create a feature summary file and sync it to the matching GitHub issue"
-  default_prompt: "Use $feature-closeout to document a validated feature in a Markdown file, then update the matching GitHub issue with the same clear summary."
+  short_description: "Create a feature summary file, sync it to the issue, and ensure a PR exists"
+  default_prompt: "Use $feature-closeout to document a validated feature in a Markdown file, update the matching GitHub issue with the same clear summary, and create a pull request if one does not already exist."
