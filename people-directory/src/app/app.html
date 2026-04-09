@@ -1,20 +1,23 @@
-<main class="app-shell">
-  
-  <header class="app-header">
-    <div class="brand">
-      <div class="brand-mark">PD</div>
-      <div class="brand-copy">
-        <small>People Directory</small>
-        <strong>Professional records</strong>
+<div class="shell-backdrop">
+  <main class="app-shell page-shell">
+    <mat-toolbar class="app-header">
+      <div class="brand">
+        <div class="brand-mark">PD</div>
+
+        <div class="brand-copy">
+          <span class="app-name">People Directory</span>
+          <span class="app-tagline">Material foundations for a clear CRUD workspace</span>
+        </div>
       </div>
-    </div>
 
-    <div class="header-actions">
-      <button type="button" (click)="goToNewPersons()">New person</button>
-    </div>
-  </header>
+      <div class="header-actions">
+        <button mat-button type="button">Directory</button>
+        <button mat-flat-button type="button" (click)="goToNewPersons()">New person</button>
+      </div>
+    </mat-toolbar>
 
-  <section class="app-content">
-    <router-outlet />
-  </section>
-</main>
+    <section class="app-content">
+      <router-outlet />
+    </section>
+  </main>
+</div>
