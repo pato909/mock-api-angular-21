@@ -1,5 +1,5 @@
 import { httpResource } from '@angular/common/http';
-import { inject, Injectable, Injector, Signal } from '@angular/core';
+import { computed, inject, Injectable, Injector, Signal } from '@angular/core';
 import { Person } from '../model/person.model';
 import { PersonsListQuery } from '../model/person-query.model';
 
@@ -27,6 +27,25 @@ export class PersonsResources {
         injector: this.injector,
       },
     );
+  }
+
+  countPersons(query: Signal<PersonsListQuery>) {
+    const persons = httpResource<Person[]>(
+      () => ({
+        url: `${this.baseUrl}/persons`,
+        method: 'GET',
+        params: {
+          search: query().search,
+          page: 1,
+          limit: 100000,
+        },
+      }),
+      {
+        injector: this.injector,
+      },
+    );
+
+    return computed(() => persons.value()?.length ?? 0);
   }
 
   personDetail(id: Signal<string>) {
