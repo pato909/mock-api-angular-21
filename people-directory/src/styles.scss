@@ -78,10 +78,17 @@ body::before {
 
 button,
 a,
-input,
 textarea,
 select,
 [tabindex] {
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--app-focus-ring);
+    border-radius: var(--radius-sm);
+  }
+}
+
+input:not(.mat-mdc-input-element) {
   &:focus-visible {
     outline: none;
     box-shadow: var(--app-focus-ring);
@@ -217,3 +224,4 @@ p {
     font: var(--mat-sys-headline-large);
   }
 }
+
