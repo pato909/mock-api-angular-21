@@ -38,66 +38,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatPaginatorModule,
   ],
   styles: `
-    .page-hero {
-      display: grid;
-      gap: var(--space-4);
-      padding: var(--space-6);
-      border: 1px solid var(--app-border);
-      border-radius: var(--radius-md);
-      background:
-        radial-gradient(
-          circle at top right,
-          color-mix(in srgb, var(--mat-sys-secondary-container) 70%, white) 0%,
-          transparent 28%
-        ),
-        linear-gradient(
-          180deg,
-          color-mix(in srgb, var(--mat-sys-surface-container-low) 70%, white),
-          var(--app-surface)
-        );
-    }
-
-    .page-hero__actions {
-      margin-top: var(--space-1);
-    }
-
-    .page-panel {
-      display: grid;
-      gap: var(--space-4);
-      margin-top: var(--space-4);
-      padding: var(--space-5);
-      border: 1px solid var(--app-border);
-      border-radius: var(--radius-md);
-      background: var(--app-surface);
-      box-shadow: 0 10px 24px color-mix(in srgb, var(--app-border) 26%, transparent);
-    }
-
-    .page-panel .section-header {
-      display: grid;
-      gap: var(--space-2);
-      padding-bottom: var(--space-3);
-      border-bottom: 1px solid color-mix(in srgb, var(--app-border) 70%, transparent);
-    }
-
-    .page-panel .page-section {
-      display: grid;
-      gap: var(--space-2);
-      padding: 0;
-    }
-
-    .page-panel__content {
-      display: grid;
-      gap: var(--space-3);
-    }
-
     .page-search-field {
       max-width: 36rem;
       width: 100%;
-    }
-
-    .page-panel__hint {
-      margin: 0;
-      color: var(--app-text-muted);
     }
 
     .persons-table-wrapper {
