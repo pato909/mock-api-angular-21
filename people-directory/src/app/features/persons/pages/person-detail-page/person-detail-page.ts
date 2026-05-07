@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
@@ -196,19 +196,27 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonDetailPage {
-  id = input.required<string>();
-  private readonly personService = inject(PersonsResources);
+  // input signal lié à la route (withComponentInputBinding)
+  readonly id = input.required<string>();
+
+  private readonly personsResources = inject(PersonsResources);
   private readonly router = inject(Router);
 
-  person = this.personService.personDetail(this.id);
+  protected readonly person = this.personsResources.personDetail;
+
+  constructor() {
+    effect(() => {
+      this.personsResources.setPersonId(this.id());
+    });
+  }
 
   protected readonly isNotFound = () => this.person.statusCode() === 404;
 
-  protected retryPersonDetail() {
-    this.person = this.personService.personDetail(this.id);
+  protected retryPersonDetail(): void {
+    this.person.reload();
   }
 
-  protected goToPersonsList() {
+  protected goToPersonsList(): void {
     void this.router.navigateByUrl('/persons');
   }
 }

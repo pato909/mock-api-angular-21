@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   MatError,
@@ -13,8 +21,8 @@ import { PersonFormPayload } from '../../model/person-form.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { notFutureDateValidator } from '../../../../shared/validators/date.validators';
-import { required } from '@angular/forms/signals';
 import { avatarUrlValidator } from '../../../../shared/validators/url.validators';
+import { Person } from '../../model/person.model';
 
 @Component({
   selector: 'app-person-form',
@@ -67,9 +75,6 @@ import { avatarUrlValidator } from '../../../../shared/validators/url.validators
 
         @if (form.controls.phone.hasError('maxlength') && form.controls.phone.touched) {
           <mat-error>Le numéro de télephone ne peut pas depasser 30 caracteres.</mat-error>
-        }
-        @if (form.controls.phone.hasError('pattern') && form.controls.phone.touched) {
-          <mat-error>Le format du telephone n'est pas valide.</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
@@ -130,7 +135,7 @@ import { avatarUrlValidator } from '../../../../shared/validators/url.validators
 
       <div class="person-form__actions">
         <button mat-flat-button type="submit" [disabled]="form.invalid || isSubmitting()">
-          Creer la personne
+          {{ submitLabel() }}
         </button>
       </div>
     </form>
@@ -156,10 +161,17 @@ import { avatarUrlValidator } from '../../../../shared/validators/url.validators
 })
 export class PersonForm {
   readonly submitted = output<PersonFormPayload>();
-  private readonly phonePattern = /^\+?[0-9][0-9\s().-]{6,29}$/;
+  private initializedPersonId: string | null = null;
+
   readonly today = new Date();
 
   readonly isSubmitting = input.required<boolean>();
+  readonly person = input<Person | undefined>(undefined);
+
+  readonly isEditMode = computed(() => !!this.person());
+  readonly submitLabel = computed(() =>
+    this.isEditMode() ? 'Modifier la personne' : 'Créer la personne',
+  );
 
   readonly form = new FormGroup({
     firstName: new FormControl('', {
@@ -172,13 +184,7 @@ export class PersonForm {
     }),
     phone: new FormControl('', {
       nonNullable: true,
-      // F06 only required `required + maxLength(30)`, but we intentionally keep
-      // a stricter phone format check here to avoid obviously invalid values.
-      validators: [
-        Validators.required,
-        Validators.maxLength(30),
-        Validators.pattern(this.phonePattern),
-      ],
+      validators: [Validators.required, Validators.maxLength(30)],
     }),
     email: new FormControl('', {
       nonNullable: true,
@@ -192,6 +198,31 @@ export class PersonForm {
       validators: [Validators.required, Validators.maxLength(256), avatarUrlValidator],
     }),
   });
+
+  constructor() {
+    effect(() => {
+      const person = this.person();
+
+      if (!person) {
+        return;
+      }
+
+      if (person.id === this.initializedPersonId) {
+        return;
+      }
+
+      this.initializedPersonId = person.id;
+
+      this.form.reset({
+        firstName: person.firstName,
+        lastName: person.lastName,
+        phone: person.phone,
+        email: person.email,
+        birthDate: person.birthDate ? new Date(person.birthDate) : null,
+        avatar: person.avatar,
+      });
+    });
+  }
 
   submit(): void {
     if (this.form.invalid) {

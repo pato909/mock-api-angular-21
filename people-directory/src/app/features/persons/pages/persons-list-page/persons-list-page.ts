@@ -283,8 +283,8 @@ export class PersonsListPage {
 
   personsResources = inject(PersonsResources);
 
-  persons = this.personsResources.personsList(this.query);
-  countResource = this.personsResources.countPersons(this.query);
+  protected readonly persons = this.personsResources.personsList;
+  protected readonly countResource = this.personsResources.personsCount;
 
   displayedColumns = ['avatar', 'name', 'email', 'phone', 'birthDate', 'actions'];
 
@@ -312,6 +312,10 @@ export class PersonsListPage {
       onCleanup(() => {
         globalThis.clearTimeout(timer);
       });
+    });
+
+    effect(() => {
+      this.personsResources.setListQuery(this.query())
     });
   }
 

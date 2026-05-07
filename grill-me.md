@@ -156,7 +156,7 @@ Rules:
 - `lastName` required, max `30`
 - `email` required, email format, max `60`
 - `birthDate` required, valid date, not in the future
-- `phone` required, max `30`
+- `phone` required, max `30`; no format validation in V1
 - `avatar` required, valid URL, max `256`
 - trim text fields before submit
 - use clear and accessible validation messages

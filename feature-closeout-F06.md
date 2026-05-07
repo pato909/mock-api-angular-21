@@ -43,7 +43,7 @@ The create flow is now implemented at `/persons/new` with a reusable reactive fo
 
 - Kept the API call in `PersonCreatePage` and kept `PersonForm` focused on form state, validation, and payload emission so the same component can be reused for F07.
 - Used `HttpClient` mutation flow through the existing `PersonsApiService` rather than forcing this into a resource-style abstraction.
-- Added a stricter phone format validator than the original F06 wording required. This is intentionally documented in the form code as a deliberate validation choice rather than an accidental divergence.
+- Kept phone validation intentionally light: required and max length only, with no phone format validation in V1.
 - Added a custom Material date adapter so typed dates and picker-selected dates both align with the intended local `dd/MM/yyyy` UX and do not shift by one day when serialized.
 
 ## Files or Areas Affected
@@ -84,6 +84,6 @@ Before opening a PR for `F06`, the next Git steps should be:
 
 ## Follow-ups or Deferred Work
 
-- The stricter phone-pattern validation is intentionally kept even though the original F06 wording only required `required + max 30`.
+- Phone format validation is intentionally out of scope for V1; keep the field to `required + max 30` only.
 - F07 should reuse `PersonForm` for the edit flow rather than duplicating field and validation logic.
 - The current closeout is based on local validated work; GitHub sync and PR creation still depend on repository/network access.
