@@ -85,8 +85,7 @@ Pull request created:
 Branch:
 `codex/f07-person-edit-form`
 
-Commit:
-`2fabdfa`
+Commits are available on the PR branch.
 
 ## GitHub Sync
 
