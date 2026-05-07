@@ -79,25 +79,22 @@ Result:
 
 ## Pull Request Status
 
-No pull request was identified from this local closeout or from a GitHub PR search for F07.
+Pull request created:
+[PR #19 - F07 - Person Edit Form](https://github.com/pato909/mock-api-angular-21/pull/19)
 
-PR creation is not included in the local validation yet because:
-- the repository is currently on `main`
-- the F07 work is still uncommitted
-- the working tree also contains documentation alignment changes related to the phone validation decision
+Branch:
+`codex/f07-person-edit-form`
 
-Before opening a PR for `F07`, the next Git steps should be:
-- confirm the intended branch strategy for the edit-form work
-- stage the intended F07 and documentation changes
-- commit the validated changes
-- push a feature branch
-- open a PR aligned with `F07 - Person Edit Form`
+Commit:
+`2fabdfa`
 
 ## GitHub Sync
 
 - Matching issue confirmed: [Issue #7](https://github.com/pato909/mock-api-angular-21/issues/7)
 - Completion summary posted to the issue.
 - Posted comment id: `4394481881`
+- PR publication comment posted to the issue.
+- Posted PR comment id: `4394515309`
 
 ## Follow-ups or Deferred Work
 
