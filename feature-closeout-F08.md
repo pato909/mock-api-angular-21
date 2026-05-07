@@ -72,21 +72,20 @@ Result:
 
 ## Pull Request Status
 
-No F08 pull request exists yet.
+Pull request created:
+[PR #20 - F08 - Delete Confirmation and Mutation Feedback](https://github.com/pato909/mock-api-angular-21/pull/20)
 
-Current blocker:
-- the repository is still on `main`
-- the F08 work and closeout are local, uncommitted changes
-- no feature branch has been pushed for this closeout yet
-
-Recommended branch name:
+Branch:
 `codex/f08-delete-confirmation-feedback`
+
+Commits are available on the PR branch.
 
 ## GitHub Sync
 
 - Matching issue confirmed: [Issue #6](https://github.com/pato909/mock-api-angular-21/issues/6)
 - Completion summary posted to the issue.
 - Posted comment id: `4398248357`
+- Pull request created and linked from the issue.
 
 ## Follow-ups or Deferred Work
 
