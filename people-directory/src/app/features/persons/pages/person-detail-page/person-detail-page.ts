@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
@@ -8,6 +8,12 @@ import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loadi
 import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
 import { DatePipe } from '@angular/common';
 import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
+import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-dialog';
+import { filter, finalize, switchMap, tap } from 'rxjs';
+import { Person } from '../../model/person.model';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PersonsApiService } from '../../data/persons-api.service';
 
 @Component({
   selector: 'app-person-detail-page',
@@ -62,12 +68,17 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
           </div>
 
           <div class="detail-actions" aria-label="Actions de la personne">
-            <a mat-flat-button [routerLink]="['/persons', p.id, 'edit']">
+            <button mat-flat-button type="button" [routerLink]="['/persons', p.id, 'edit']">
               <mat-icon aria-hidden="true">edit</mat-icon>
               Modifier
-            </a>
+            </button>
 
-            <button mat-stroked-button type="button" disabled>
+            <button
+              mat-flat-button
+              type="button"
+              (click)="deletePerson(p)"
+              [disabled]="isDeleting()"
+            >
               <mat-icon aria-hidden="true">delete</mat-icon>
               Supprimer
             </button>
@@ -198,11 +209,16 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
 export class PersonDetailPage {
   // input signal lié à la route (withComponentInputBinding)
   readonly id = input.required<string>();
+  readonly isDeleting = signal(false);
 
   private readonly personsResources = inject(PersonsResources);
+  private readonly personApi = inject(PersonsApiService);
   private readonly router = inject(Router);
 
   protected readonly person = this.personsResources.personDetail;
+
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     effect(() => {
@@ -218,5 +234,39 @@ export class PersonDetailPage {
 
   protected goToPersonsList(): void {
     void this.router.navigateByUrl('/persons');
+  }
+
+  protected deletePerson(person: Person): void {
+    const dialogRef = this.dialog.open(DeletePersonDialog, {
+      data: {
+        firstName: person.firstName,
+        lastName: person.lastName,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        tap(() => this.isDeleting.set(true)),
+        switchMap(() => this.personApi.delete(person.id)),
+        finalize(() => this.isDeleting.set(false)),
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Person deleted.', 'Close', {
+            duration: 3000,
+          });
+
+          this.personsResources.reloadPersons();
+          this.personsResources.reloadPersonsCount();
+          void this.router.navigate(['/persons']);
+        },
+        error: () => {
+          this.snackBar.open('Could not delete person.', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
   }
 }
