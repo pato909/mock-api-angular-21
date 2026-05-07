@@ -20,6 +20,12 @@ import { DatePipe } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIcon } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { Person } from '../../model/person.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-dialog';
+import { filter, switchMap } from 'rxjs';
+import { PersonsApiService } from '../../data/persons-api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-persons-list-page',
@@ -184,7 +190,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
                   ? 'Essayez un autre terme de recherche ou effacez la recherche courante.'
                   : 'Creez une premiere personne pour commencer a alimenter l\\'annuaire.'
               "
-              [actionLabel]="query().search.trim() ? 'Effacer la recherche' : 'Creer la premiere personne'"
+              [actionLabel]="
+                query().search.trim() ? 'Effacer la recherche' : 'Creer la premiere personne'
+              "
               (action)="query().search.trim() ? clearSearch() : goToCreate()"
             />
           } @else {
@@ -248,6 +256,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
                     <div class="person-actions">
                       <a mat-button [routerLink]="['/persons', person.id]">Voir</a>
                       <a mat-button [routerLink]="['/persons', person.id, 'edit']">Modifier</a>
+                      <button mat-button type="button" (click)="deletePerson(person)">
+                        Supprimer
+                      </button>
                     </div>
                   </td>
                 </ng-container>
@@ -282,11 +293,15 @@ export class PersonsListPage {
   });
 
   personsResources = inject(PersonsResources);
+  personApi = inject(PersonsApiService);
 
   protected readonly persons = this.personsResources.personsList;
   protected readonly countResource = this.personsResources.personsCount;
 
   displayedColumns = ['avatar', 'name', 'email', 'phone', 'birthDate', 'actions'];
+
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   rows = computed(() => this.persons.value() ?? []);
   searchInput = signal('');
@@ -315,7 +330,7 @@ export class PersonsListPage {
     });
 
     effect(() => {
-      this.personsResources.setListQuery(this.query())
+      this.personsResources.setListQuery(this.query());
     });
   }
 
@@ -362,5 +377,38 @@ export class PersonsListPage {
 
   protected goToCreate() {
     void this.router.navigateByUrl('/persons/new');
+  }
+
+  protected deletePerson(person: Person) {
+    const dialogRef = this.dialog.open(DeletePersonDialog, {
+      data: {
+        firstName: person.firstName,
+        lastName: person.lastName,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((confirmed) => confirmed === true),
+        switchMap(() => this.personApi.delete(person.id)),
+      )
+      .subscribe({
+        next: () => {
+          // snackbar success
+          this.snackBar.open('Person Deleted.', 'Close', {
+            duration: 3000,
+          });
+          //this.clearSearch()
+          this.personsResources.reloadPersons();
+          this.personsResources.reloadPersonsCount();
+        },
+        error: () => {
+          // snackbar error
+          this.snackBar.open('Could not delete person.', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
   }
 }

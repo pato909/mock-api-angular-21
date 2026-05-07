@@ -70,4 +70,12 @@ export class PersonsResources {
   reloadPersonDetail(): void {
     this.personDetail.reload();
   }
+
+  reloadPersons(): void {
+    this.personsList.reload();
+  }
+
+  reloadPersonsCount(): void {
+    this._personsCountResource.reload();
+  }
 }
