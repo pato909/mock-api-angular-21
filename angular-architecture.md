@@ -362,7 +362,7 @@ The architecture should preserve these validation rules:
 - `lastName`: required, max `30`
 - `email`: required, valid email, max `60`
 - `birthDate`: required, valid date, not in the future
-- `phone`: required, max `30`
+- `phone`: required, max `30`; no format validation in V1
 - `avatar`: required, valid URL, max `256`
 
 Text normalization such as trimming should happen at the form boundary before submit.
