@@ -69,12 +69,20 @@ Result:
 
 ## Pull Request Status
 
-Pending publication.
+Pull request created:
+[PR #22 - F10 - Loading, Empty, Error, and Not-Found Polish](https://github.com/pato909/mock-api-angular-21/pull/22)
+
+Branch:
+`codex/f10-state-polish`
+
+Commits are available on the PR branch.
 
 ## GitHub Sync
 
 - Matching issue confirmed: [Issue #3](https://github.com/pato909/mock-api-angular-21/issues/3)
-- Completion summary prepared for issue sync.
+- Completion summary posted to the issue.
+- Posted comment URL: [F10 closeout comment](https://github.com/pato909/mock-api-angular-21/issues/3#issuecomment-4406483566)
+- Pull request created and linked from the issue.
 
 ## Follow-ups or Deferred Work
 
