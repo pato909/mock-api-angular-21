@@ -68,14 +68,13 @@ Manual validation:
 
 ## Pull Request Status
 
-No dedicated F09 pull request was found during closeout.
+Pull request created:
+[PR #21 - F09 - Avatar Fallback and Display Robustness](https://github.com/pato909/mock-api-angular-21/pull/21)
 
-The local workspace is currently on branch:
-`codex/f08-delete-confirmation-feedback`
+Branch:
+`codex/f09-avatar-fallback`
 
-F09 work is present locally but has not been confirmed as committed, pushed, or represented by a dedicated F09 pull request from this closeout step.
-
-Recent repository pull requests were checked with the GitHub CLI, and no pull request with `F09` in the title was found.
+Commits are available on the PR branch.
 
 ## GitHub Sync
 
@@ -83,9 +82,9 @@ Recent repository pull requests were checked with the GitHub CLI, and no pull re
 - Completion summary posted to the issue.
 - Posted comment id: `4405739262`
 - Posted comment URL: [F09 closeout comment](https://github.com/pato909/mock-api-angular-21/issues/2#issuecomment-4405739262)
+- Pull request created and linked from the issue.
 
 ## Follow-ups or Deferred Work
 
 - The Angular initial bundle budget warning remains and should be handled separately from F09.
 - Broader loading, empty, error, and not-found polish remains part of `F10`.
-- The current local branch should be reviewed before publishing F09, because it still appears to be the F08 branch.
