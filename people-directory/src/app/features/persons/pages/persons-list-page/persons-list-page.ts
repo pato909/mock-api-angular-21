@@ -130,9 +130,11 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
               matInput
               type="text"
               placeholder="Rechercher par nom, email ou telephone"
+              aria-describedby="persons-search-hint"
               [value]="this.searchInput()"
               (input)="updateSearch(searchInput.value)"
             />
+            <mat-hint id="persons-search-hint">Recherche par nom, email ou telephone.</mat-hint>
             @if (this.searchInput()) {
               <button
                 mat-icon-button
@@ -193,11 +195,15 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                 mat-table
                 [dataSource]="rows()"
                 class="persons-table"
+                aria-label="Liste des personnes"
                 matSort
                 [matSortActive]="sortActive()"
                 [matSortDirection]="query().order"
                 (matSortChange)="updateSort($event.active, $event.direction)"
               >
+                <caption class="sr-only">
+                  Resultats de recherche de l'annuaire des personnes.
+                </caption>
                 <ng-container matColumnDef="avatar">
                   <th mat-header-cell *matHeaderCellDef>Avatar</th>
                   <td mat-cell *matCellDef="let person">
@@ -246,12 +252,25 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                   <th mat-header-cell *matHeaderCellDef>Actions</th>
                   <td mat-cell *matCellDef="let person">
                     <div class="person-actions">
-                      <a mat-button [routerLink]="['/persons', person.id]">Voir</a>
-                      <a mat-button [routerLink]="['/persons', person.id, 'edit']">Modifier</a>
+                      <a
+                        mat-button
+                        [routerLink]="['/persons', person.id]"
+                        [attr.aria-label]="'Voir la fiche de ' + fullName(person)"
+                      >
+                        Voir
+                      </a>
+                      <a
+                        mat-button
+                        [routerLink]="['/persons', person.id, 'edit']"
+                        [attr.aria-label]="'Modifier la fiche de ' + fullName(person)"
+                      >
+                        Modifier
+                      </a>
                       <button
                         mat-button
                         type="button"
                         [disabled]="isDeleting(person.id)"
+                        [attr.aria-label]="'Supprimer la fiche de ' + fullName(person)"
                         (click)="deletePerson(person)"
                       >
                         {{ isDeleting(person.id) ? 'Suppression...' : 'Supprimer' }}
@@ -268,6 +287,7 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                 [pageSize]="query().limit"
                 [pageSizeOptions]="[5, 10, 25, 50]"
                 [length]="countResource()"
+                aria-label="Pagination des personnes"
                 (page)="updatePage($event.pageIndex, $event.pageSize)"
               />
             </div>
@@ -414,5 +434,9 @@ export class PersonsListPage {
 
   protected isDeleting(personId: string): boolean {
     return this.deletingPersonId() === personId;
+  }
+
+  protected fullName(person: Person): string {
+    return `${person.firstName} ${person.lastName}`;
   }
 }
