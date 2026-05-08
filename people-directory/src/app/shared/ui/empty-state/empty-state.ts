@@ -66,9 +66,9 @@ import { MatCardModule } from '@angular/material/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyStateComponent {
-  readonly kicker = input('Empty state');
-  readonly title = input('Nothing to display');
-  readonly message = input('Content will appear here once data is available.');
+  readonly kicker = input('Aucun contenu');
+  readonly title = input('Rien a afficher');
+  readonly message = input('Le contenu apparaitra ici des que des donnees seront disponibles.');
   readonly actionLabel = input('');
   readonly action = output<void>();
 }

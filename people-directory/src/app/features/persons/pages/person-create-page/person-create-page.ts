@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { PersonForm } from '../../ui/person-form/person-form';
@@ -32,7 +32,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
         </div>
 
         <div class="page-panel__content">
-          <app-person-form (submitted)="createPerson($event) " [isSubmitting]="isSubmitting()" />
+          <app-person-form (submitted)="createPerson($event)" [isSubmitting]="isSubmitting()" />
         </div>
       </section>
     </section>
@@ -47,19 +47,23 @@ export class PersonCreatePage {
   readonly isSubmitting = signal(false);
 
   protected createPerson(payload: PersonFormPayload): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.personService.create(payload).subscribe({
       next: (person) => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Person created.', 'Close', {
+        this.snackBar.open('Personne creee.', 'Fermer', {
           duration: 3000,
         });
 
         void this.router.navigate(['/persons', person.id]);
       },
-      error: (error) => {
+      error: () => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Could not create person.', 'Close', {
+        this.snackBar.open('Impossible de creer la personne.', 'Fermer', {
           duration: 3000,
         });
       },

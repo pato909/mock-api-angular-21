@@ -8,13 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  MatError,
-  MatFormField,
-  MatHint,
-  MatLabel,
-  MatSuffix,
-} from '@angular/material/form-field';
+import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { PersonFormPayload } from '../../model/person-form.model';
@@ -65,7 +59,7 @@ import { Person } from '../../model/person.model';
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
-        <mat-label>Phone</mat-label>
+        <mat-label>Telephone</mat-label>
         <input matInput formControlName="phone" />
         <mat-hint>Exemple : +32 477 12 34 56</mat-hint>
 
@@ -123,7 +117,7 @@ import { Person } from '../../model/person.model';
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Avatar</mat-label>
         <input matInput formControlName="avatar" />
-        <mat-hint>url de la photo</mat-hint>
+        <mat-hint>URL de la photo</mat-hint>
 
         @if (form.controls.avatar.hasError('required') && form.controls.avatar.touched) {
           <mat-error>Avatar obligatoire.</mat-error>
@@ -170,7 +164,11 @@ export class PersonForm {
 
   readonly isEditMode = computed(() => !!this.person());
   readonly submitLabel = computed(() =>
-    this.isEditMode() ? 'Modifier la personne' : 'Créer la personne',
+    this.isSubmitting()
+      ? 'Enregistrement...'
+      : this.isEditMode()
+        ? 'Modifier la personne'
+        : 'Creer la personne',
   );
 
   readonly form = new FormGroup({
@@ -225,6 +223,10 @@ export class PersonForm {
   }
 
   submit(): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

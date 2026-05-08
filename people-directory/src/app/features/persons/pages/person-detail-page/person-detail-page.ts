@@ -83,7 +83,7 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
               [disabled]="isDeleting()"
             >
               <mat-icon aria-hidden="true">delete</mat-icon>
-              Supprimer
+              {{ isDeleting() ? 'Suppression...' : 'Supprimer' }}
             </button>
           </div>
         </div>
@@ -229,6 +229,10 @@ export class PersonDetailPage {
   }
 
   protected deletePerson(person: Person): void {
+    if (this.isDeleting()) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(DeletePersonDialog, {
       data: {
         firstName: person.firstName,
@@ -246,7 +250,7 @@ export class PersonDetailPage {
       )
       .subscribe({
         next: () => {
-          this.snackBar.open('Person deleted.', 'Close', {
+          this.snackBar.open('Personne supprimee.', 'Fermer', {
             duration: 3000,
           });
 
@@ -255,7 +259,7 @@ export class PersonDetailPage {
           void this.router.navigate(['/persons']);
         },
         error: () => {
-          this.snackBar.open('Could not delete person.', 'Close', {
+          this.snackBar.open('Impossible de supprimer la personne.', 'Fermer', {
             duration: 3000,
           });
         },
