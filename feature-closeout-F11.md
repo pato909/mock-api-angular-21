@@ -73,16 +73,19 @@ Result:
 ## Pull Request Status
 
 Pull request created:
-Pending publication.
+[PR #23 - F11 - Accessibility and Interaction Pass](https://github.com/pato909/mock-api-angular-21/pull/23)
 
 Branch:
-Pending publication.
+`codex/f11-accessibility-interactions`
+
+Commits are available on the PR branch.
 
 ## GitHub Sync
 
 - Matching issue confirmed: [Issue #4](https://github.com/pato909/mock-api-angular-21/issues/4)
-- Completion summary pending GitHub sync.
-- Pull request pending publication.
+- Completion summary posted to the issue.
+- Posted comment URL: [F11 closeout comment](https://github.com/pato909/mock-api-angular-21/issues/4#issuecomment-4406622435)
+- Pull request created and linked from the issue.
 
 ## Follow-ups or Deferred Work
 
