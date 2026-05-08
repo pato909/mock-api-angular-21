@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { A11yModule } from '@angular/cdk/a11y';
 
 type DeletePersonDialogData = {
   firstName: string;
@@ -9,18 +10,26 @@ type DeletePersonDialogData = {
 
 @Component({
   selector: 'app-delete-person-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, A11yModule],
   template: `
     <h2 mat-dialog-title>Supprimer cette personne ?</h2>
 
-    <mat-dialog-content>
+    <mat-dialog-content id="delete-person-dialog-description">
       Cette action supprimera definitivement {{ fullName(data) }}.
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-button type="button" (click)="cancel()">Annuler</button>
+      <button mat-button type="button" cdkFocusInitial (click)="cancel()">Annuler</button>
 
-      <button mat-flat-button color="warn" type="button" (click)="confirm()">Supprimer</button>
+      <button
+        mat-flat-button
+        color="warn"
+        type="button"
+        [attr.aria-describedby]="'delete-person-dialog-description'"
+        (click)="confirm()"
+      >
+        Supprimer
+      </button>
     </mat-dialog-actions>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +46,7 @@ export class DeletePersonDialog {
     this.dialogRef.close(true);
   }
 
-  fullName(data : DeletePersonDialogData): string {
+  fullName(data: DeletePersonDialogData): string {
     return `${data.firstName} ${data.lastName}`;
   }
 }

@@ -1,4 +1,6 @@
 <div class="shell-backdrop">
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+
   <main class="app-shell page-shell">
     <mat-toolbar class="app-header">
       <div class="brand">
@@ -11,12 +13,12 @@
       </div>
 
       <div class="header-actions">
-        <button mat-button type="button">Directory</button>
-        <button mat-flat-button type="button" (click)="goToNewPersons()">New person</button>
+        <a mat-button routerLink="/persons">Directory</a>
+        <a mat-flat-button routerLink="/persons/new">New person</a>
       </div>
     </mat-toolbar>
 
-    <section class="app-content">
+    <section id="main-content" class="app-content" tabindex="-1">
       <router-outlet />
     </section>
   </main>

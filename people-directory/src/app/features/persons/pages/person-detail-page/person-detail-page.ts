@@ -70,17 +70,22 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
             </div>
           </div>
 
-          <div class="detail-actions" aria-label="Actions de la personne">
-            <button mat-flat-button type="button" [routerLink]="['/persons', p.id, 'edit']">
+          <div class="detail-actions" role="group" aria-label="Actions de la personne">
+            <a
+              mat-flat-button
+              [routerLink]="['/persons', p.id, 'edit']"
+              [attr.aria-label]="'Modifier la fiche de ' + fullName(p)"
+            >
               <mat-icon aria-hidden="true">edit</mat-icon>
               Modifier
-            </button>
+            </a>
 
             <button
               mat-flat-button
               type="button"
               (click)="deletePerson(p)"
               [disabled]="isDeleting()"
+              [attr.aria-label]="'Supprimer la fiche de ' + fullName(p)"
             >
               <mat-icon aria-hidden="true">delete</mat-icon>
               {{ isDeleting() ? 'Suppression...' : 'Supprimer' }}
@@ -226,6 +231,10 @@ export class PersonDetailPage {
 
   protected goToPersonsList(): void {
     void this.router.navigateByUrl('/persons');
+  }
+
+  protected fullName(person: Person): string {
+    return `${person.firstName} ${person.lastName}`;
   }
 
   protected deletePerson(person: Person): void {

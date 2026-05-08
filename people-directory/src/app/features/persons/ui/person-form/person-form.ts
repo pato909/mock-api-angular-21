@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   effect,
+  inject,
   input,
   output,
   signal,
@@ -33,10 +35,22 @@ import { Person } from '../../model/person.model';
     MatNativeDateModule,
   ],
   template: `
-    <form class="person-form" [formGroup]="form" (ngSubmit)="submit()">
+    <form
+      class="person-form"
+      [formGroup]="form"
+      [attr.aria-busy]="isSubmitting()"
+      novalidate
+      (ngSubmit)="submit()"
+    >
+      @if (showValidationSummary()) {
+        <p class="person-form__validation-summary" role="alert">
+          Verifiez les champs signales avant d'enregistrer la personne.
+        </p>
+      }
+
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Prenom</mat-label>
-        <input matInput formControlName="firstName" />
+        <input matInput formControlName="firstName" autocomplete="given-name" />
 
         @if (form.controls.firstName.hasError('required') && form.controls.firstName.touched) {
           <mat-error>Le prenom est obligatoire.</mat-error>
@@ -48,7 +62,7 @@ import { Person } from '../../model/person.model';
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Nom de famille</mat-label>
-        <input matInput formControlName="lastName" />
+        <input matInput formControlName="lastName" autocomplete="family-name" />
 
         @if (form.controls.lastName.hasError('required') && form.controls.lastName.touched) {
           <mat-error>Le nom de famille est obligatoire.</mat-error>
@@ -60,7 +74,7 @@ import { Person } from '../../model/person.model';
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Telephone</mat-label>
-        <input matInput formControlName="phone" />
+        <input matInput formControlName="phone" autocomplete="tel" />
         <mat-hint>Exemple : +32 477 12 34 56</mat-hint>
 
         @if (form.controls.phone.hasError('required') && form.controls.phone.touched) {
@@ -73,7 +87,7 @@ import { Person } from '../../model/person.model';
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" />
+        <input matInput formControlName="email" type="email" autocomplete="email" />
         <mat-hint>aa.bb&#64;cc.com</mat-hint>
 
         @if (form.controls.email.hasError('required') && form.controls.email.touched) {
@@ -116,7 +130,7 @@ import { Person } from '../../model/person.model';
 
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Avatar</mat-label>
-        <input matInput formControlName="avatar" />
+        <input matInput formControlName="avatar" type="url" autocomplete="url" />
         <mat-hint>URL de la photo</mat-hint>
 
         @if (form.controls.avatar.hasError('required') && form.controls.avatar.touched) {
@@ -128,7 +142,7 @@ import { Person } from '../../model/person.model';
       </mat-form-field>
 
       <div class="person-form__actions">
-        <button mat-flat-button type="submit" [disabled]="form.invalid || isSubmitting()">
+        <button mat-flat-button type="submit" [disabled]="isSubmitting()">
           {{ submitLabel() }}
         </button>
       </div>
@@ -145,6 +159,15 @@ import { Person } from '../../model/person.model';
       width: 100%;
     }
 
+    .person-form__validation-summary {
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid color-mix(in srgb, var(--mat-sys-error) 42%, white);
+      border-radius: var(--radius-sm);
+      background: color-mix(in srgb, var(--mat-sys-error-container) 68%, white);
+      color: var(--mat-sys-on-error-container);
+      font: var(--mat-sys-body-medium);
+    }
+
     .person-form__actions {
       display: flex;
       flex-wrap: wrap;
@@ -156,6 +179,7 @@ import { Person } from '../../model/person.model';
 export class PersonForm {
   readonly submitted = output<PersonFormPayload>();
   private initializedPersonId: string | null = null;
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly today = new Date();
 
@@ -197,6 +221,8 @@ export class PersonForm {
     }),
   });
 
+  readonly showValidationSummary = signal(false);
+
   constructor() {
     effect(() => {
       const person = this.person();
@@ -229,8 +255,12 @@ export class PersonForm {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.showValidationSummary.set(true);
+      queueMicrotask(() => this.focusFirstInvalidControl());
       return;
     }
+
+    this.showValidationSummary.set(false);
 
     this.submitted.emit({
       firstName: this.form.controls.firstName.value.trim(),
@@ -240,6 +270,14 @@ export class PersonForm {
       birthDate: formatDateOnly(this.form.controls.birthDate.value),
       avatar: this.form.controls.avatar.value.trim(),
     });
+  }
+
+  private focusFirstInvalidControl(): void {
+    const firstInvalidControl = this.host.nativeElement.querySelector<HTMLElement>(
+      '.ng-invalid[formControlName]',
+    );
+
+    firstInvalidControl?.focus();
   }
 }
 

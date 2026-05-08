@@ -35,8 +35,16 @@ html {
   --radius-pill: 999px;
 
   --app-bg:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--mat-sys-primary) 10%, transparent), transparent 28%),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--mat-sys-tertiary) 12%, transparent), transparent 22%),
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--mat-sys-primary) 10%, transparent),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--mat-sys-tertiary) 12%, transparent),
+      transparent 22%
+    ),
     linear-gradient(180deg, #f7f5ef 0%, #eff2ef 100%);
   --app-surface: color-mix(in srgb, var(--mat-sys-surface) 88%, white);
   --app-surface-strong: color-mix(in srgb, var(--mat-sys-surface-container-low) 84%, white);
@@ -82,7 +90,8 @@ textarea,
 select,
 [tabindex] {
   &:focus-visible {
-    outline: none;
+    outline: 3px solid color-mix(in srgb, var(--mat-sys-primary) 72%, black);
+    outline-offset: 3px;
     box-shadow: var(--app-focus-ring);
     border-radius: var(--radius-sm);
   }
@@ -90,10 +99,25 @@ select,
 
 input:not(.mat-mdc-input-element) {
   &:focus-visible {
-    outline: none;
+    outline: 3px solid color-mix(in srgb, var(--mat-sys-primary) 72%, black);
+    outline-offset: 3px;
     box-shadow: var(--app-focus-ring);
     border-radius: var(--radius-sm);
   }
+}
+
+.mat-mdc-button-base:focus-visible,
+.mat-mdc-icon-button:focus-visible,
+.mat-mdc-paginator-navigation-first:focus-visible,
+.mat-mdc-paginator-navigation-previous:focus-visible,
+.mat-mdc-paginator-navigation-next:focus-visible,
+.mat-mdc-paginator-navigation-last:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--mat-sys-primary) 72%, black);
+  outline-offset: 3px;
+}
+
+.mat-mdc-row:focus-within {
+  background: color-mix(in srgb, var(--mat-sys-secondary-container) 24%, white);
 }
 
 h1,
@@ -294,4 +318,3 @@ a.page-info-value {
     font: var(--mat-sys-headline-large);
   }
 }
-
