@@ -23,7 +23,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Person } from '../../model/person.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-dialog';
-import { filter, switchMap } from 'rxjs';
+import { filter, finalize, switchMap, tap } from 'rxjs';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
@@ -248,8 +248,13 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                     <div class="person-actions">
                       <a mat-button [routerLink]="['/persons', person.id]">Voir</a>
                       <a mat-button [routerLink]="['/persons', person.id, 'edit']">Modifier</a>
-                      <button mat-button type="button" (click)="deletePerson(person)">
-                        Supprimer
+                      <button
+                        mat-button
+                        type="button"
+                        [disabled]="isDeleting(person.id)"
+                        (click)="deletePerson(person)"
+                      >
+                        {{ isDeleting(person.id) ? 'Suppression...' : 'Supprimer' }}
                       </button>
                     </div>
                   </td>
@@ -294,6 +299,7 @@ export class PersonsListPage {
 
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  protected readonly deletingPersonId = signal<string | null>(null);
 
   rows = computed(() => this.persons.value() ?? []);
   searchInput = signal('');
@@ -362,9 +368,8 @@ export class PersonsListPage {
   }
 
   protected retryPersonsList() {
-    this.query.update((current) => ({
-      ...current,
-    }));
+    this.personsResources.reloadPersons();
+    this.personsResources.reloadPersonsCount();
   }
 
   protected goToCreate() {
@@ -372,6 +377,10 @@ export class PersonsListPage {
   }
 
   protected deletePerson(person: Person) {
+    if (this.deletingPersonId()) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(DeletePersonDialog, {
       data: {
         firstName: person.firstName,
@@ -383,24 +392,27 @@ export class PersonsListPage {
       .afterClosed()
       .pipe(
         filter((confirmed) => confirmed === true),
+        tap(() => this.deletingPersonId.set(person.id)),
         switchMap(() => this.personApi.delete(person.id)),
+        finalize(() => this.deletingPersonId.set(null)),
       )
       .subscribe({
         next: () => {
-          // snackbar success
-          this.snackBar.open('Person Deleted.', 'Close', {
+          this.snackBar.open('Personne supprimee.', 'Fermer', {
             duration: 3000,
           });
-          //this.clearSearch()
           this.personsResources.reloadPersons();
           this.personsResources.reloadPersonsCount();
         },
         error: () => {
-          // snackbar error
-          this.snackBar.open('Could not delete person.', 'Close', {
+          this.snackBar.open('Impossible de supprimer la personne.', 'Fermer', {
             duration: 3000,
           });
         },
       });
+  }
+
+  protected isDeleting(personId: string): boolean {
+    return this.deletingPersonId() === personId;
   }
 }

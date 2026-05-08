@@ -66,9 +66,9 @@ import { MatCardModule } from '@angular/material/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorStateComponent {
-  readonly kicker = input('Error state');
-  readonly title = input('Something went wrong');
-  readonly message = input('Please retry or return later.');
+  readonly kicker = input('Erreur');
+  readonly title = input('Une erreur est survenue');
+  readonly message = input('Veuillez reessayer ou revenir plus tard.');
   readonly actionLabel = input('');
   readonly retry = output<void>();
 }

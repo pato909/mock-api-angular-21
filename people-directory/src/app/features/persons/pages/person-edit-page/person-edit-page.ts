@@ -31,11 +31,11 @@ import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loadi
         </div>
       </div>
 
-      <section class="page-panel" aria-labelledby="create-person-title">
+      <section class="page-panel" aria-labelledby="edit-person-title">
         <div class="section-header">
           <div class="page-section">
             <span class="page-eyebrow">Formulaire</span>
-            <h2 id="create-person-title" class="section-title">Informations de la personne</h2>
+            <h2 id="edit-person-title" class="section-title">Informations de la personne</h2>
           </div>
         </div>
         <div class="page-panel__content">
@@ -93,20 +93,24 @@ export class PersonEditPage {
   }
 
   protected updatePerson(id: string, payload: PersonFormPayload): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.personService.update(id, payload).subscribe({
       next: (person) => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Person updated.', 'Close', {
+        this.snackBar.open('Personne modifiee.', 'Fermer', {
           duration: 3000,
         });
 
         this.personsResources.reloadPersonDetail();
         void this.router.navigate(['/persons', person.id]);
       },
-      error: (error) => {
+      error: () => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Could not update the person.', 'Close', {
+        this.snackBar.open('Impossible de modifier la personne.', 'Fermer', {
           duration: 3000,
         });
       },

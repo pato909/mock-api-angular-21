@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
           mode="indeterminate"
           diameter="40"
           strokeWidth="4"
-          aria-label="Loading content"
+          aria-label="Chargement du contenu"
         />
 
         <div class="state-copy">
@@ -54,6 +54,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingStateComponent {
-  readonly title = input('Loading');
-  readonly message = input('Please wait while the content is prepared.');
+  readonly title = input('Chargement en cours');
+  readonly message = input('Veuillez patienter pendant la preparation du contenu.');
 }
