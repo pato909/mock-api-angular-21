@@ -14,6 +14,7 @@ import { Person } from '../../model/person.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonsApiService } from '../../data/persons-api.service';
+import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
 
 @Component({
   selector: 'app-person-detail-page',
@@ -26,6 +27,7 @@ import { PersonsApiService } from '../../data/persons-api.service';
     ErrorStateComponent,
     DatePipe,
     EmptyStateComponent,
+    PersonAvatar,
   ],
   template: `
     @if (person.isLoading()) {
@@ -54,10 +56,11 @@ import { PersonsApiService } from '../../data/persons-api.service';
       <section class="page-section">
         <div class="page-hero detail-hero">
           <div class="detail-hero__identity">
-            <img
-              class="detail-avatar"
-              [src]="p.avatar"
-              [alt]="'Avatar de ' + p.firstName + ' ' + p.lastName"
+            <app-person-avatar
+              [avatar]="p.avatar"
+              [firstName]="p.firstName"
+              [lastName]="p.lastName"
+              variant="detail"
             />
 
             <div class="detail-hero__copy">
@@ -161,17 +164,6 @@ import { PersonsApiService } from '../../data/persons-api.service';
       align-items: center;
       gap: var(--space-5);
       min-width: 0;
-    }
-
-    .detail-avatar {
-      display: block;
-      width: clamp(7rem, 18vw, 10rem);
-      height: clamp(7rem, 18vw, 10rem);
-      flex: 0 0 auto;
-      border: 3px solid color-mix(in srgb, var(--mat-sys-secondary-container) 70%, white);
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--mat-sys-secondary-container) 38%, white);
-      object-fit: cover;
     }
 
     .detail-hero__copy {

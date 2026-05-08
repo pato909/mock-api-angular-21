@@ -26,6 +26,7 @@ import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-
 import { filter, switchMap } from 'rxjs';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
 
 @Component({
   selector: 'app-persons-list-page',
@@ -42,6 +43,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSortModule,
     MatIcon,
     MatPaginatorModule,
+    PersonAvatar,
   ],
   styles: `
     .page-search-field {
@@ -94,16 +96,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
     .person-secondary {
       color: var(--app-text-muted);
-    }
-
-    .person-avatar {
-      width: 2.75rem;
-      height: 2.75rem;
-      border-radius: 999px;
-      object-fit: cover;
-      display: block;
-      border: 2px solid color-mix(in srgb, var(--mat-sys-secondary-container) 55%, white);
-      background: color-mix(in srgb, var(--mat-sys-secondary-container) 38%, white);
     }
 
     .person-actions {
@@ -209,10 +201,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
                 <ng-container matColumnDef="avatar">
                   <th mat-header-cell *matHeaderCellDef>Avatar</th>
                   <td mat-cell *matCellDef="let person">
-                    <img
-                      class="person-avatar"
-                      [src]="person.avatar"
-                      [alt]="'Avatar of ' + person.firstName + ' ' + person.lastName"
+                    <app-person-avatar
+                      [avatar]="person.avatar"
+                      [firstName]="person.firstName"
+                      [lastName]="person.lastName"
                     />
                   </td>
                 </ng-container>
