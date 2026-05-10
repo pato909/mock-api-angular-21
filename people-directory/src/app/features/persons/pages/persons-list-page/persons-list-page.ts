@@ -27,6 +27,7 @@ import { filter, finalize, switchMap, tap } from 'rxjs';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
+import { SecurityService } from '../../../../core/security/security.service';
 
 @Component({
   selector: 'app-persons-list-page',
@@ -177,12 +178,12 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
               [title]="
                 query().search.trim()
                   ? 'Aucune personne ne correspond a votre recherche'
-                  : 'Aucune personne dans l\\'annuaire pour le moment'
+                  : 'Aucune personne dans l annuaire pour le moment'
               "
               [message]="
                 query().search.trim()
                   ? 'Essayez un autre terme de recherche ou effacez la recherche courante.'
-                  : 'Creez une premiere personne pour commencer a alimenter l\\'annuaire.'
+                  : 'Creez une premiere personne pour commencer a alimenter l annuaire.'
               "
               [actionLabel]="
                 query().search.trim() ? 'Effacer la recherche' : 'Creer la premiere personne'
@@ -256,6 +257,7 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                         mat-button
                         [routerLink]="['/persons', person.id]"
                         [attr.aria-label]="'Voir la fiche de ' + fullName(person)"
+                        [disabled]="!securityService.isConnected()"
                       >
                         Voir
                       </a>
@@ -263,13 +265,17 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
                         mat-button
                         [routerLink]="['/persons', person.id, 'edit']"
                         [attr.aria-label]="'Modifier la fiche de ' + fullName(person)"
+                        [disabled]="
+                          !securityService.isConnected() ||
+                          (securityService.isConnected() && !securityService.user().admin)
+                        "
                       >
                         Modifier
                       </a>
                       <button
                         mat-button
                         type="button"
-                        [disabled]="isDeleting(person.id)"
+                        [disabled]="isDeleting(person.id) || (!securityService.isConnected() || (securityService.isConnected() && !securityService.user().admin))"
                         [attr.aria-label]="'Supprimer la fiche de ' + fullName(person)"
                         (click)="deletePerson(person)"
                       >
@@ -300,6 +306,7 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
 })
 export class PersonsListPage {
   private readonly router = inject(Router);
+  protected readonly securityService = inject(SecurityService);
 
   query = signal<PersonsListQuery>({
     search: '',
@@ -397,6 +404,8 @@ export class PersonsListPage {
   }
 
   protected deletePerson(person: Person) {
+    if (!this.securityService.isConnected() || !this.securityService.user().admin) return;
+
     if (this.deletingPersonId()) {
       return;
     }

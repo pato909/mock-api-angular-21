@@ -15,6 +15,28 @@
       <div class="header-actions">
         <a mat-button routerLink="/persons">Directory</a>
         <a mat-flat-button routerLink="/persons/new">New person</a>
+        @if (!securityService.isConnected()) {
+          <a mat-button (click)="forceLogin()">Login</a>
+        } @else {
+          <!-- Menu déroulant -->
+          <button mat-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+            {{ securityService.user().firstname }} {{ securityService.user().lastname }}
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item routerLink="/profile">
+              <mat-icon >person</mat-icon>
+              <span>Profil</span>
+            </button>
+            <mat-divider />
+            <button mat-menu-item (click)="securityService.logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        }
       </div>
     </mat-toolbar>
 

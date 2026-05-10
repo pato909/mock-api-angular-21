@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
+import { SecurityService } from '../../../../core/security/security.service';
 
 @Component({
   selector: 'app-person-detail-page',
@@ -75,6 +76,10 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
               mat-flat-button
               [routerLink]="['/persons', p.id, 'edit']"
               [attr.aria-label]="'Modifier la fiche de ' + fullName(p)"
+              [disabled]="
+                !securityService.isConnected() ||
+                (securityService.isConnected() && !securityService.user().admin)
+              "
             >
               <mat-icon aria-hidden="true">edit</mat-icon>
               Modifier
@@ -84,7 +89,11 @@ import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
               mat-flat-button
               type="button"
               (click)="deletePerson(p)"
-              [disabled]="isDeleting()"
+              [disabled]="
+                isDeleting() ||
+                !securityService.isConnected() ||
+                (securityService.isConnected() && !securityService.user().admin)
+              "
               [attr.aria-label]="'Supprimer la fiche de ' + fullName(p)"
             >
               <mat-icon aria-hidden="true">delete</mat-icon>
@@ -211,6 +220,7 @@ export class PersonDetailPage {
   private readonly personsResources = inject(PersonsResources);
   private readonly personApi = inject(PersonsApiService);
   private readonly router = inject(Router);
+  readonly securityService = inject(SecurityService)
 
   protected readonly person = this.personsResources.personDetail;
 
@@ -238,6 +248,8 @@ export class PersonDetailPage {
   }
 
   protected deletePerson(person: Person): void {
+    if (!this.securityService.isConnected() || !this.securityService.user().admin) return;
+
     if (this.isDeleting()) {
       return;
     }
