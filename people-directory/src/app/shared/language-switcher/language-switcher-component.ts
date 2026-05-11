@@ -14,10 +14,10 @@ import { TranslatePipe } from '@ngx-translate/core';
         [disabled]="activeLanguage() === 'fr'"
         (click)="useLanguage('fr')"
       >
-        {{ 'language.fr' | translate }}
+        FR
       </button>
 
-      <span class="language-switcher__separator" aria-hidden="true">|</span>
+      <span class="language-switcher__separator" aria-hidden="true">·</span>
 
       <button
         type="button"
@@ -26,7 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
         [disabled]="activeLanguage() === 'en'"
         (click)="useLanguage('en')"
       >
-        {{ 'language.en' | translate }}
+        EN
       </button>
     </div>
   `,
@@ -34,42 +34,46 @@ import { TranslatePipe } from '@ngx-translate/core';
     .language-switcher {
       display: inline-flex;
       align-items: center;
-      gap: 0.375rem;
+      gap: 0.35rem;
       font-size: 0.875rem;
-      margin-left: 100px;
+      line-height: 1;
     }
 
     .language-switcher__link {
       padding: 0;
       border: 0;
       background: transparent;
-      color: #2563eb;
+      color: var(--mat-sys-primary);
       cursor: pointer;
       font: inherit;
-      text-decoration: underline;
-      text-underline-offset: 0.15em;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-decoration: none;
     }
 
     .language-switcher__link:hover:not(:disabled) {
-      color: #1d4ed8;
+      color: color-mix(in srgb, var(--mat-sys-primary) 82%, black);
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
     }
 
     .language-switcher__link:focus-visible {
-      outline: 2px solid #2563eb;
+      outline: 2px solid var(--mat-sys-primary);
       outline-offset: 3px;
       border-radius: 0.125rem;
     }
 
     .language-switcher__link--active,
     .language-switcher__link:disabled {
-      color: #475569;
+      color: var(--app-text);
       cursor: default;
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
     }
 
     .language-switcher__separator {
-      color: #cbd5e1;
+      color: var(--app-text-muted);
+      font-size: 0.8rem;
     }
   `,
 })
