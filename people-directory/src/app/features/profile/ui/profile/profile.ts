@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
@@ -63,6 +63,38 @@ import { SecurityService } from '../../../../core/security/security.service';
               <span class="page-info-label">Langue</span>
               <span class="page-info-value">{{ user.locale | uppercase }}</span>
             </div>
+          </div>
+        </section>
+
+        <section class="page-panel" aria-labelledby="permissions-title">
+          <div class="section-header">
+            <div class="page-section">
+              <span class="page-eyebrow">Autorisations</span>
+              <h2 id="permissions-title" class="section-title">Actions disponibles</h2>
+            </div>
+          </div>
+
+          <div class="permissions-list" role="list">
+            @for (permission of permissions(); track permission.label) {
+              <div
+                class="permission-item"
+                role="listitem"
+                [class.permission-item--allowed]="permission.allowed"
+              >
+                <span class="permission-icon" aria-hidden="true">
+                  <mat-icon>{{ permission.allowed ? 'check_circle' : 'block' }}</mat-icon>
+                </span>
+
+                <span class="permission-copy">
+                  <span class="permission-label">{{ permission.label }}</span>
+                  <span class="permission-description">{{ permission.description }}</span>
+                </span>
+
+                <span class="permission-status">
+                  {{ permission.allowed ? 'Autorise' : 'Non autorise' }}
+                </span>
+              </div>
+            }
           </div>
         </section>
 
@@ -165,6 +197,63 @@ import { SecurityService } from '../../../../core/security/security.service';
       margin: 0;
     }
 
+    .permissions-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .permission-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border: 1px solid color-mix(in srgb, var(--app-border) 72%, transparent);
+      border-radius: var(--radius-md);
+      background: color-mix(in srgb, var(--mat-sys-surface-container-low) 55%, aliceblue);
+    }
+
+    .permission-item--allowed {
+      border-color: color-mix(in srgb, var(--mat-sys-primary) 24%, white);
+      background: color-mix(in srgb, var(--mat-sys-primary-container) 36%, white);
+    }
+
+    .permission-icon {
+      display: inline-grid;
+      place-items: center;
+      color: var(--app-text-muted);
+    }
+
+    .permission-item--allowed .permission-icon {
+      color: var(--mat-sys-primary);
+    }
+
+    .permission-copy {
+      display: grid;
+      gap: 0.2rem;
+      min-width: 0;
+    }
+
+    .permission-label {
+      color: var(--app-text);
+      font: var(--mat-sys-title-small);
+    }
+
+    .permission-description {
+      color: var(--app-text-muted);
+      font: var(--mat-sys-body-medium);
+    }
+
+    .permission-status {
+      justify-self: end;
+      color: var(--app-text-muted);
+      font: var(--mat-sys-label-large);
+    }
+
+    .permission-item--allowed .permission-status {
+      color: var(--mat-sys-primary);
+    }
+
     @media (max-width: 640px) {
       .profile-actions {
         width: 100%;
@@ -175,6 +264,15 @@ import { SecurityService } from '../../../../core/security/security.service';
         flex: 1 1 12rem;
         justify-content: center;
       }
+
+      .permission-item {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .permission-status {
+        grid-column: 2;
+        justify-self: start;
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -183,6 +281,39 @@ export class ProfileComponent {
   protected readonly securityService = inject(SecurityService);
 
   protected readonly userConnected = this.securityService.user;
+
+  protected readonly permissions = computed(() => {
+    const isConnected = this.securityService.isConnected();
+    const isAdmin = isConnected && this.userConnected().admin;
+
+    return [
+      {
+        label: 'Consulter l annuaire',
+        description: 'Voir la liste des personnes et utiliser la recherche.',
+        allowed: isConnected,
+      },
+      {
+        label: 'Consulter une fiche',
+        description: 'Ouvrir le detail complet d une personne.',
+        allowed: isConnected,
+      },
+      {
+        label: 'Creer une personne',
+        description: 'Ajouter une nouvelle fiche dans l annuaire.',
+        allowed: isAdmin,
+      },
+      {
+        label: 'Modifier une personne',
+        description: 'Editer les informations d une fiche existante.',
+        allowed: isAdmin,
+      },
+      {
+        label: 'Supprimer une personne',
+        description: 'Retirer definitivement une fiche apres confirmation.',
+        allowed: isAdmin,
+      },
+    ];
+  });
 
   protected displayName(): string {
     const user = this.userConnected();
