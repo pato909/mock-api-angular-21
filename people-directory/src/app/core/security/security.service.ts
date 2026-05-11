@@ -69,7 +69,7 @@ export class SecurityService {
       return;
     }
 
-    if (currentPath !== '/') {
+    if (this.isProtectedPath(currentPath)) {
       this.oauthService.initCodeFlow(currentPath);
       return new Promise(() => {});
     }
@@ -170,6 +170,15 @@ export class SecurityService {
     }
 
     return [];
+  }
+
+  private isProtectedPath(path: string): boolean {
+    return (
+      path === '/profile' ||
+      path === '/persons/new' ||
+      /^\/persons\/[^/]+$/.test(path) ||
+      /^\/persons\/[^/]+\/edit$/.test(path)
+    );
   }
 }
 
