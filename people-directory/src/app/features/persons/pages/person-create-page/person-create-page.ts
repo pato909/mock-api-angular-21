@@ -5,29 +5,32 @@ import { PersonForm } from '../../ui/person-form/person-form';
 import { PersonFormPayload } from '../../model/person-form.model';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-person-create-page',
-  imports: [MatButtonModule, RouterLink, PersonForm],
+  imports: [MatButtonModule, RouterLink, PersonForm, TranslatePipe],
   template: `
     <section class="page-section">
       <div class="page-hero">
-        <span class="page-eyebrow">Nouvelle personne</span>
-        <h1 class="page-title">Ajouter une personne a l'annuaire.</h1>
+        <span class="page-eyebrow">{{ 'persons.create.eyebrow' | translate }}</span>
+        <h1 class="page-title">{{ 'persons.create.title' | translate }}</h1>
         <p class="page-subtitle">
-          Renseignez les informations principales avant de creer la fiche.
+          {{ 'persons.create.subtitle' | translate }}
         </p>
 
         <div class="page-hero__actions">
-          <a mat-stroked-button routerLink="/persons">Retour a l'annuaire</a>
+          <a mat-stroked-button routerLink="/persons">{{ 'common.backToDirectory' | translate }}</a>
         </div>
       </div>
 
       <section class="page-panel" aria-labelledby="create-person-title">
         <div class="section-header">
           <div class="page-section">
-            <span class="page-eyebrow">Formulaire</span>
-            <h2 id="create-person-title" class="section-title">Informations de la personne</h2>
+            <span class="page-eyebrow">{{ 'persons.create.formEyebrow' | translate }}</span>
+            <h2 id="create-person-title" class="section-title">
+              {{ 'persons.create.formTitle' | translate }}
+            </h2>
           </div>
         </div>
 
@@ -43,6 +46,7 @@ export class PersonCreatePage {
   private readonly personService = inject(PersonsApiService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   readonly isSubmitting = signal(false);
 
@@ -55,17 +59,25 @@ export class PersonCreatePage {
     this.personService.create(payload).subscribe({
       next: (person) => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Personne creee.', 'Fermer', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          this.translate.instant('persons.snackbar.created'),
+          this.translate.instant('common.close'),
+          {
+            duration: 3000,
+          },
+        );
 
         void this.router.navigate(['/persons', person.id]);
       },
       error: () => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Impossible de creer la personne.', 'Fermer', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          this.translate.instant('persons.snackbar.createError'),
+          this.translate.instant('common.close'),
+          {
+            duration: 3000,
+          },
+        );
       },
     });
   }

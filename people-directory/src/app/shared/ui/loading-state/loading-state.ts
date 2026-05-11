@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loading-state',
-  imports: [MatCardModule, MatProgressSpinnerModule],
+  imports: [MatCardModule, MatProgressSpinnerModule, TranslatePipe],
   template: `
     <mat-card class="state-card">
       <mat-card-content class="state-layout">
@@ -12,12 +13,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
           mode="indeterminate"
           diameter="40"
           strokeWidth="4"
-          aria-label="Chargement du contenu"
+          [attr.aria-label]="'common.loadingContent' | translate"
         />
 
         <div class="state-copy">
-          <h3>{{ title() }}</h3>
-          <p>{{ message() }}</p>
+          <h3>{{ title() | translate }}</h3>
+          <p>{{ message() | translate }}</p>
         </div>
       </mat-card-content>
     </mat-card>
@@ -54,6 +55,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingStateComponent {
-  readonly title = input('Chargement en cours');
-  readonly message = input('Veuillez patienter pendant la preparation du contenu.');
+  readonly title = input('state.loading.title');
+  readonly message = input('state.loading.message');
 }

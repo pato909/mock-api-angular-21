@@ -1,0 +1,211 @@
+{
+  "app": {
+    "title": "Annuaire des personnes",
+    "tagline": "Bases Material pour un espace CRUD clair",
+    "skipToMain": "Aller au contenu principal",
+    "nav": {
+      "directory": "Annuaire",
+      "newPerson": "Nouvelle personne",
+      "login": "Connexion",
+      "profile": "Profil",
+      "logout": "Déconnexion"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "authorized": "Autorisé",
+    "avatar": "Avatar",
+    "avatarOf": "Avatar de {{ name }}",
+    "backHome": "Accueil",
+    "backToDirectory": "Retour à l'annuaire",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "delete": "Supprimer",
+    "deleting": "Suppression...",
+    "directory": "Annuaire",
+    "edit": "Modifier",
+    "email": "Email",
+    "error": "Erreur",
+    "firstName": "Prénom",
+    "identifier": "Identifiant",
+    "language": "Langue",
+    "lastName": "Nom",
+    "loadingContent": "Chargement du contenu",
+    "notFilled": "Non renseigné",
+    "notAuthorized": "Non autorisé",
+    "phone": "Téléphone",
+    "retry": "Réessayer",
+    "role": "Rôle",
+    "save": "Enregistrer",
+    "security": "Sécurité",
+    "status": "Statut",
+    "view": "Voir"
+  },
+  "language": {
+    "selection": "Sélection de la langue",
+    "fr": "Français",
+    "en": "English"
+  },
+  "state": {
+    "empty": {
+      "kicker": "Aucun contenu",
+      "title": "Rien à afficher",
+      "message": "Le contenu apparaîtra ici dès que des données seront disponibles."
+    },
+    "error": {
+      "kicker": "Erreur",
+      "title": "Une erreur est survenue",
+      "message": "Veuillez réessayer ou revenir plus tard."
+    },
+    "loading": {
+      "title": "Chargement en cours",
+      "message": "Veuillez patienter pendant la préparation du contenu."
+    }
+  },
+  "accessDenied": {
+    "eyebrow": "Accès refusé",
+    "title": "Vous n'avez pas les droits pour ouvrir cette page.",
+    "message": "Votre session est active, mais le rôle associé ne permet pas d'utiliser cette action.",
+    "navigationLabel": "Navigation depuis la page accès refusé"
+  },
+  "notFound": {
+    "eyebrow": "Page introuvable",
+    "title": "Cette adresse ne correspond à aucune page.",
+    "message": "Le lien est peut-être obsolète ou l'adresse contient une erreur.",
+    "navigationLabel": "Navigation depuis la page introuvable"
+  },
+  "persons": {
+    "fields": {
+      "avatarUrl": "URL de la photo",
+      "birthDate": "Date de naissance",
+      "fullName": "Nom complet"
+    },
+    "list": {
+      "eyebrow": "Annuaire",
+      "title": "Parcourir et gérer les personnes en un seul endroit.",
+      "newPerson": "Nouvelle personne",
+      "searchTitle": "Recherche",
+      "searchLabel": "Rechercher une personne",
+      "searchPlaceholder": "Rechercher par nom, email ou téléphone",
+      "searchHint": "Recherche par nom, email ou téléphone.",
+      "clearSearch": "Effacer la recherche",
+      "resultsTitle": "Résultats",
+      "loadingTitle": "Chargement des personnes",
+      "loadingMessage": "Les données de l'annuaire sont en cours de chargement.",
+      "loadErrorTitle": "Le chargement de l'annuaire a échoué",
+      "loadErrorMessage": "Réessayez pour récupérer la liste des personnes avec les filtres actuels.",
+      "emptyKicker": "Aucun résultat",
+      "emptySearchTitle": "Aucune personne ne correspond à votre recherche",
+      "emptySearchMessage": "Essayez un autre terme de recherche ou effacez la recherche courante.",
+      "emptyDirectoryTitle": "Aucune personne dans l'annuaire pour le moment",
+      "emptyDirectoryMessage": "Créez une première personne pour commencer à alimenter l'annuaire.",
+      "createFirstPerson": "Créer la première personne",
+      "tableLabel": "Liste des personnes",
+      "tableCaption": "Résultats de recherche de l'annuaire des personnes.",
+      "personIdentifier": "Identifiant : {{ id }}",
+      "viewPerson": "Voir la fiche de {{ name }}",
+      "editPerson": "Modifier la fiche de {{ name }}",
+      "deletePerson": "Supprimer la fiche de {{ name }}",
+      "paginationLabel": "Pagination des personnes"
+    },
+    "detail": {
+      "personCard": "Fiche personne",
+      "actionsLabel": "Actions de la personne",
+      "coordinates": "Coordonnées",
+      "mainInformation": "Informations principales",
+      "metadata": "Métadonnées",
+      "tracking": "Suivi de la fiche",
+      "createdAt": "Créé le",
+      "updatedAt": "Mis à jour le",
+      "loadingTitle": "Chargement de la personne",
+      "loadingMessage": "Les données sont en cours de chargement.",
+      "notFoundKicker": "Introuvable",
+      "notFoundTitle": "Personne introuvable",
+      "notFoundMessage": "Cette fiche n'existe plus ou l'identifiant ne correspond à aucune personne.",
+      "loadErrorTitle": "Le chargement de la personne a échoué",
+      "loadErrorMessage": "Réessayez pour récupérer les données."
+    },
+    "create": {
+      "eyebrow": "Nouvelle personne",
+      "title": "Ajouter une personne à l'annuaire.",
+      "subtitle": "Renseignez les informations principales avant de créer la fiche.",
+      "formEyebrow": "Formulaire",
+      "formTitle": "Informations de la personne"
+    },
+    "edit": {
+      "eyebrow": "Édition personne",
+      "title": "Modifier une personne de l'annuaire"
+    },
+    "form": {
+      "validationSummary": "Vérifiez les champs signalés avant d'enregistrer la personne.",
+      "firstNameRequired": "Le prénom est obligatoire.",
+      "firstNameMaxLength": "Le prénom ne peut pas dépasser 30 caractères.",
+      "lastNameRequired": "Le nom de famille est obligatoire.",
+      "lastNameMaxLength": "Le nom de famille ne peut pas dépasser 30 caractères.",
+      "phoneHint": "Exemple : +32 477 12 34 56",
+      "phoneRequired": "Le numéro de téléphone est obligatoire.",
+      "phoneMaxLength": "Le numéro de téléphone ne peut pas dépasser 30 caractères.",
+      "emailRequired": "L'email est obligatoire.",
+      "emailMaxLength": "L'email ne peut pas dépasser 60 caractères.",
+      "emailInvalid": "L'email n'est pas valide.",
+      "birthDateRequired": "La date de naissance est obligatoire.",
+      "birthDateFuture": "La date ne peut pas être dans le futur.",
+      "birthDateInvalid": "La date saisie n'est pas valide.",
+      "avatarRequired": "Avatar obligatoire.",
+      "avatarInvalidUrl": "L'URL doit être valide.",
+      "saving": "Enregistrement...",
+      "createSubmit": "Créer la personne",
+      "editSubmit": "Modifier la personne"
+    },
+    "deleteDialog": {
+      "title": "Supprimer cette personne ?",
+      "description": "Cette action supprimera définitivement {{ name }}."
+    },
+    "snackbar": {
+      "created": "Personne créée.",
+      "createError": "Impossible de créer la personne.",
+      "updated": "Personne modifiée.",
+      "updateError": "Impossible de modifier la personne.",
+      "deleted": "Personne supprimée.",
+      "deleteError": "Impossible de supprimer la personne."
+    }
+  },
+  "profile": {
+    "eyebrow": "Profil",
+    "subtitle": "Informations issues de la session de sécurité active.",
+    "actionsLabel": "Actions du profil",
+    "identity": "Identité",
+    "mainInformation": "Informations principales",
+    "permissions": "Autorisations",
+    "availableActions": "Actions disponibles",
+    "securityTitle": "Droits et identifiants",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "administrator": "Administrateur",
+    "user": "Utilisateur",
+    "fallbackName": "Profil utilisateur",
+    "fallbackInitials": "PU",
+    "permissionsList": {
+      "directory": {
+        "label": "Consulter l'annuaire",
+        "description": "Voir la liste des personnes et utiliser la recherche."
+      },
+      "detail": {
+        "label": "Consulter une fiche",
+        "description": "Ouvrir le détail complet d'une personne."
+      },
+      "create": {
+        "label": "Créer une personne",
+        "description": "Ajouter une nouvelle fiche dans l'annuaire."
+      },
+      "edit": {
+        "label": "Modifier une personne",
+        "description": "Éditer les informations d'une fiche existante."
+      },
+      "delete": {
+        "label": "Supprimer une personne",
+        "description": "Retirer définitivement une fiche après confirmation."
+      }
+    }
+  }
+}

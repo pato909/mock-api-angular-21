@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-not-found',
-  imports: [MatButton, MatIcon, RouterLink],
+  imports: [MatButton, MatIcon, RouterLink, TranslatePipe],
   template: `
     <section class="page-section">
       <div class="page-hero not-found-hero">
@@ -14,22 +15,26 @@ import { RouterLink } from '@angular/router';
         </div>
 
         <div class="status-copy">
-          <span class="page-eyebrow">Page introuvable</span>
-          <h1 class="page-title">Cette adresse ne correspond a aucune page.</h1>
+          <span class="page-eyebrow">{{ 'notFound.eyebrow' | translate }}</span>
+          <h1 class="page-title">{{ 'notFound.title' | translate }}</h1>
           <p class="page-subtitle">
-            Le lien est peut-etre obsolete ou l'adresse contient une erreur.
+            {{ 'notFound.message' | translate }}
           </p>
         </div>
 
-        <div class="status-actions" role="group" aria-label="Navigation depuis la page introuvable">
+        <div
+          class="status-actions"
+          role="group"
+          [attr.aria-label]="'notFound.navigationLabel' | translate"
+        >
           <a mat-flat-button routerLink="/persons">
             <mat-icon aria-hidden="true">groups</mat-icon>
-            Retour a l'annuaire
+            {{ 'common.backToDirectory' | translate }}
           </a>
 
           <a mat-button routerLink="/">
             <mat-icon aria-hidden="true">home</mat-icon>
-            Accueil
+            {{ 'common.backHome' | translate }}
           </a>
         </div>
       </div>

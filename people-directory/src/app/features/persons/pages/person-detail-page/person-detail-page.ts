@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonsApiService } from '../../data/persons-api.service';
 import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
 import { SecurityService } from '../../../../core/security/security.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-person-detail-page',
@@ -29,27 +30,28 @@ import { SecurityService } from '../../../../core/security/security.service';
     DatePipe,
     EmptyStateComponent,
     PersonAvatar,
+    TranslatePipe,
   ],
   template: `
     @if (person.isLoading()) {
       <app-loading-state
-        title="Chargement de la personne"
-        message="Les donnees sont en cours de chargement."
+        title="persons.detail.loadingTitle"
+        message="persons.detail.loadingMessage"
       />
     } @else if (isNotFound()) {
       <app-empty-state
-        kicker="Introuvable"
-        title="Personne introuvable"
-        message="Cette fiche n'existe plus ou l'identifiant ne correspond a aucune personne."
-        actionLabel="Retour a l'annuaire"
+        kicker="persons.detail.notFoundKicker"
+        title="persons.detail.notFoundTitle"
+        message="persons.detail.notFoundMessage"
+        actionLabel="common.backToDirectory"
         (action)="goToPersonsList()"
       />
     } @else if (person.error()) {
       <app-error-state
-        kicker="Erreur"
-        title="Le chargement de la personne a échoué"
-        message="Reessayez pour récupérer les données."
-        actionLabel="Reessayer"
+        kicker="common.error"
+        title="persons.detail.loadErrorTitle"
+        message="persons.detail.loadErrorMessage"
+        actionLabel="common.retry"
         (retry)="retryPersonDetail()"
       />
     }
@@ -65,24 +67,28 @@ import { SecurityService } from '../../../../core/security/security.service';
             />
 
             <div class="detail-hero__copy">
-              <span class="page-eyebrow">Fiche personne</span>
+              <span class="page-eyebrow">{{ 'persons.detail.personCard' | translate }}</span>
               <h1 class="page-title">{{ p.firstName }} {{ p.lastName }}</h1>
               <p class="page-subtitle">{{ p.email }}</p>
             </div>
           </div>
 
-          <div class="detail-actions" role="group" aria-label="Actions de la personne">
+          <div
+            class="detail-actions"
+            role="group"
+            [attr.aria-label]="'persons.detail.actionsLabel' | translate"
+          >
             <a
               mat-flat-button
               [routerLink]="['/persons', p.id, 'edit']"
-              [attr.aria-label]="'Modifier la fiche de ' + fullName(p)"
+              [attr.aria-label]="'persons.list.editPerson' | translate: { name: fullName(p) }"
               [disabled]="
                 !securityService.isConnected() ||
                 (securityService.isConnected() && !securityService.user().admin)
               "
             >
               <mat-icon aria-hidden="true">edit</mat-icon>
-              Modifier
+              {{ 'common.edit' | translate }}
             </a>
 
             <button
@@ -94,10 +100,10 @@ import { SecurityService } from '../../../../core/security/security.service';
                 !securityService.isConnected() ||
                 (securityService.isConnected() && !securityService.user().admin)
               "
-              [attr.aria-label]="'Supprimer la fiche de ' + fullName(p)"
+              [attr.aria-label]="'persons.list.deletePerson' | translate: { name: fullName(p) }"
             >
               <mat-icon aria-hidden="true">delete</mat-icon>
-              {{ isDeleting() ? 'Suppression...' : 'Supprimer' }}
+              {{ (isDeleting() ? 'common.deleting' : 'common.delete') | translate }}
             </button>
           </div>
         </div>
@@ -105,28 +111,28 @@ import { SecurityService } from '../../../../core/security/security.service';
         <section class="page-panel">
           <div class="section-header">
             <div class="page-section">
-              <span class="page-eyebrow">Coordonnees</span>
-              <h2 class="section-title">Informations principales</h2>
+              <span class="page-eyebrow">{{ 'persons.detail.coordinates' | translate }}</span>
+              <h2 class="section-title">{{ 'persons.detail.mainInformation' | translate }}</h2>
             </div>
           </div>
 
           <div class="page-info-grid">
             <div class="page-info-card">
-              <span class="page-info-label">Email</span>
+              <span class="page-info-label">{{ 'common.email' | translate }}</span>
               <a class="page-info-value" [href]="'mailto:' + p.email">
                 {{ p.email }}
               </a>
             </div>
 
             <div class="page-info-card">
-              <span class="page-info-label">Telephone</span>
+              <span class="page-info-label">{{ 'common.phone' | translate }}</span>
               <a class="page-info-value" [href]="'tel:' + p.phone">
                 {{ p.phone }}
               </a>
             </div>
 
             <div class="page-info-card">
-              <span class="page-info-label">Date de naissance</span>
+              <span class="page-info-label">{{ 'persons.fields.birthDate' | translate }}</span>
               <span class="page-info-value">{{ p.birthDate | date: 'dd/MM/yyyy' }}</span>
             </div>
           </div>
@@ -135,8 +141,10 @@ import { SecurityService } from '../../../../core/security/security.service';
         <section class="page-panel page-panel--quiet" aria-labelledby="metadata-title">
           <div class="section-header">
             <div class="page-section">
-              <span class="page-eyebrow">Metadonnees</span>
-              <h2 id="metadata-title" class="section-title">Suivi de la fiche</h2>
+              <span class="page-eyebrow">{{ 'persons.detail.metadata' | translate }}</span>
+              <h2 id="metadata-title" class="section-title">
+                {{ 'persons.detail.tracking' | translate }}
+              </h2>
             </div>
           </div>
 
@@ -144,17 +152,17 @@ import { SecurityService } from '../../../../core/security/security.service';
 
           <dl class="page-info-grid metadata-list">
             <div class="page-info-card">
-              <dt class="page-info-label">Identifiant</dt>
+              <dt class="page-info-label">{{ 'common.identifier' | translate }}</dt>
               <dd class="page-info-value">{{ p.id }}</dd>
             </div>
 
             <div class="page-info-card">
-              <dt class="page-info-label">Cree le</dt>
+              <dt class="page-info-label">{{ 'persons.detail.createdAt' | translate }}</dt>
               <dd class="page-info-value">{{ p.created_at | date: 'dd/MM/yyyy' }}</dd>
             </div>
 
             <div class="page-info-card">
-              <dt class="page-info-label">Mis a jour le</dt>
+              <dt class="page-info-label">{{ 'persons.detail.updatedAt' | translate }}</dt>
               <dd class="page-info-value">{{ p.updated_at | date: 'dd/MM/yyyy' }}</dd>
             </div>
           </dl>
@@ -220,12 +228,13 @@ export class PersonDetailPage {
   private readonly personsResources = inject(PersonsResources);
   private readonly personApi = inject(PersonsApiService);
   private readonly router = inject(Router);
-  readonly securityService = inject(SecurityService)
+  readonly securityService = inject(SecurityService);
 
   protected readonly person = this.personsResources.personDetail;
 
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   constructor() {
     effect(() => {
@@ -271,18 +280,26 @@ export class PersonDetailPage {
       )
       .subscribe({
         next: () => {
-          this.snackBar.open('Personne supprimee.', 'Fermer', {
-            duration: 3000,
-          });
+          this.snackBar.open(
+            this.translate.instant('persons.snackbar.deleted'),
+            this.translate.instant('common.close'),
+            {
+              duration: 3000,
+            },
+          );
 
           this.personsResources.reloadPersons();
           this.personsResources.reloadPersonsCount();
           void this.router.navigate(['/persons']);
         },
         error: () => {
-          this.snackBar.open('Impossible de supprimer la personne.', 'Fermer', {
-            duration: 3000,
-          });
+          this.snackBar.open(
+            this.translate.instant('persons.snackbar.deleteError'),
+            this.translate.instant('common.close'),
+            {
+              duration: 3000,
+            },
+          );
         },
       });
   }

@@ -5,10 +5,11 @@ import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { SecurityService } from '../../../../core/security/security.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [MatButton, MatDivider, MatIcon, RouterLink, UpperCasePipe],
+  imports: [MatButton, MatDivider, MatIcon, RouterLink, UpperCasePipe, TranslatePipe],
   template: `
     @if (userConnected(); as user) {
       <section class="page-section">
@@ -19,23 +20,29 @@ import { SecurityService } from '../../../../core/security/security.service';
             </div>
 
             <div class="profile-copy">
-              <span class="page-eyebrow">Profil</span>
-              <h1 class="page-title">{{ displayName() }}</h1>
+              <span class="page-eyebrow">{{ 'profile.eyebrow' | translate }}</span>
+              <h1 class="page-title">
+                {{ displayName() || ('profile.fallbackName' | translate) }}
+              </h1>
               <p class="page-subtitle">
-                Informations issues de la session de securite active.
+                {{ 'profile.subtitle' | translate }}
               </p>
             </div>
           </div>
 
-          <div class="profile-actions" role="group" aria-label="Actions du profil">
+          <div
+            class="profile-actions"
+            role="group"
+            [attr.aria-label]="'profile.actionsLabel' | translate"
+          >
             <a mat-flat-button routerLink="/persons">
               <mat-icon aria-hidden="true">groups</mat-icon>
-              Annuaire
+              {{ 'common.directory' | translate }}
             </a>
 
             <button mat-button type="button" (click)="securityService.logout()">
               <mat-icon aria-hidden="true">logout</mat-icon>
-              Logout
+              {{ 'app.nav.logout' | translate }}
             </button>
           </div>
         </div>
@@ -43,24 +50,28 @@ import { SecurityService } from '../../../../core/security/security.service';
         <section class="page-panel">
           <div class="section-header">
             <div class="page-section">
-              <span class="page-eyebrow">Identite</span>
-              <h2 class="section-title">Informations principales</h2>
+              <span class="page-eyebrow">{{ 'profile.identity' | translate }}</span>
+              <h2 class="section-title">{{ 'profile.mainInformation' | translate }}</h2>
             </div>
           </div>
 
           <div class="page-info-grid">
             <div class="page-info-card">
-              <span class="page-info-label">Prenom</span>
-              <span class="page-info-value">{{ user.firstname || 'Non renseigne' }}</span>
+              <span class="page-info-label">{{ 'common.firstName' | translate }}</span>
+              <span class="page-info-value">{{
+                user.firstname || ('common.notFilled' | translate)
+              }}</span>
             </div>
 
             <div class="page-info-card">
-              <span class="page-info-label">Nom</span>
-              <span class="page-info-value">{{ user.lastname || 'Non renseigne' }}</span>
+              <span class="page-info-label">{{ 'common.lastName' | translate }}</span>
+              <span class="page-info-value">{{
+                user.lastname || ('common.notFilled' | translate)
+              }}</span>
             </div>
 
             <div class="page-info-card">
-              <span class="page-info-label">Langue</span>
+              <span class="page-info-label">{{ 'common.language' | translate }}</span>
               <span class="page-info-value">{{ user.locale | uppercase }}</span>
             </div>
           </div>
@@ -69,13 +80,15 @@ import { SecurityService } from '../../../../core/security/security.service';
         <section class="page-panel" aria-labelledby="permissions-title">
           <div class="section-header">
             <div class="page-section">
-              <span class="page-eyebrow">Autorisations</span>
-              <h2 id="permissions-title" class="section-title">Actions disponibles</h2>
+              <span class="page-eyebrow">{{ 'profile.permissions' | translate }}</span>
+              <h2 id="permissions-title" class="section-title">
+                {{ 'profile.availableActions' | translate }}
+              </h2>
             </div>
           </div>
 
           <div class="permissions-list" role="list">
-            @for (permission of permissions(); track permission.label) {
+            @for (permission of permissions(); track permission.labelKey) {
               <div
                 class="permission-item"
                 role="listitem"
@@ -86,12 +99,16 @@ import { SecurityService } from '../../../../core/security/security.service';
                 </span>
 
                 <span class="permission-copy">
-                  <span class="permission-label">{{ permission.label }}</span>
-                  <span class="permission-description">{{ permission.description }}</span>
+                  <span class="permission-label">{{ permission.labelKey | translate }}</span>
+                  <span class="permission-description">{{
+                    permission.descriptionKey | translate
+                  }}</span>
                 </span>
 
                 <span class="permission-status">
-                  {{ permission.allowed ? 'Autorise' : 'Non autorise' }}
+                  {{
+                    (permission.allowed ? 'common.authorized' : 'common.notAuthorized') | translate
+                  }}
                 </span>
               </div>
             }
@@ -101,8 +118,10 @@ import { SecurityService } from '../../../../core/security/security.service';
         <section class="page-panel page-panel--quiet" aria-labelledby="security-title">
           <div class="section-header">
             <div class="page-section">
-              <span class="page-eyebrow">Securite</span>
-              <h2 id="security-title" class="section-title">Droits et identifiants</h2>
+              <span class="page-eyebrow">{{ 'common.security' | translate }}</span>
+              <h2 id="security-title" class="section-title">
+                {{ 'profile.securityTitle' | translate }}
+              </h2>
             </div>
           </div>
 
@@ -110,25 +129,27 @@ import { SecurityService } from '../../../../core/security/security.service';
 
           <dl class="page-info-grid profile-metadata">
             <div class="page-info-card">
-              <dt class="page-info-label">Statut</dt>
+              <dt class="page-info-label">{{ 'common.status' | translate }}</dt>
               <dd class="page-info-value">
-                {{ user.connected ? 'Connecte' : 'Deconnecte' }}
+                {{ (user.connected ? 'profile.connected' : 'profile.disconnected') | translate }}
               </dd>
             </div>
 
             <div class="page-info-card">
-              <dt class="page-info-label">Role</dt>
-              <dd class="page-info-value">{{ user.admin ? 'Administrateur' : 'Utilisateur' }}</dd>
+              <dt class="page-info-label">{{ 'common.role' | translate }}</dt>
+              <dd class="page-info-value">
+                {{ (user.admin ? 'profile.administrator' : 'profile.user') | translate }}
+              </dd>
             </div>
 
             <div class="page-info-card">
               <dt class="page-info-label">NISS</dt>
-              <dd class="page-info-value">{{ user.ssin || 'Non renseigne' }}</dd>
+              <dd class="page-info-value">{{ user.ssin || ('common.notFilled' | translate) }}</dd>
             </div>
 
             <div class="page-info-card">
               <dt class="page-info-label">BCE</dt>
-              <dd class="page-info-value">{{ user.bce || 'Non renseigne' }}</dd>
+              <dd class="page-info-value">{{ user.bce || ('common.notFilled' | translate) }}</dd>
             </div>
           </dl>
         </section>
@@ -288,28 +309,28 @@ export class ProfileComponent {
 
     return [
       {
-        label: 'Consulter l annuaire',
-        description: 'Voir la liste des personnes et utiliser la recherche.',
+        labelKey: 'profile.permissionsList.directory.label',
+        descriptionKey: 'profile.permissionsList.directory.description',
         allowed: isConnected,
       },
       {
-        label: 'Consulter une fiche',
-        description: 'Ouvrir le detail complet d une personne.',
+        labelKey: 'profile.permissionsList.detail.label',
+        descriptionKey: 'profile.permissionsList.detail.description',
         allowed: isConnected,
       },
       {
-        label: 'Creer une personne',
-        description: 'Ajouter une nouvelle fiche dans l annuaire.',
+        labelKey: 'profile.permissionsList.create.label',
+        descriptionKey: 'profile.permissionsList.create.description',
         allowed: isAdmin,
       },
       {
-        label: 'Modifier une personne',
-        description: 'Editer les informations d une fiche existante.',
+        labelKey: 'profile.permissionsList.edit.label',
+        descriptionKey: 'profile.permissionsList.edit.description',
         allowed: isAdmin,
       },
       {
-        label: 'Supprimer une personne',
-        description: 'Retirer definitivement une fiche apres confirmation.',
+        labelKey: 'profile.permissionsList.delete.label',
+        descriptionKey: 'profile.permissionsList.delete.description',
         allowed: isAdmin,
       },
     ];
@@ -319,7 +340,7 @@ export class ProfileComponent {
     const user = this.userConnected();
     const fullName = [user.firstname, user.lastname].filter(Boolean).join(' ');
 
-    return fullName || 'Profil utilisateur';
+    return fullName;
   }
 
   protected initials(): string {

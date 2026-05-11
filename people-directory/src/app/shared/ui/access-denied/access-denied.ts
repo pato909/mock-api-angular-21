@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-access-denied',
-  imports: [MatButton, MatIcon, RouterLink],
+  imports: [MatButton, MatIcon, RouterLink, TranslatePipe],
   template: `
     <section class="page-section">
       <div class="page-hero access-hero">
@@ -14,22 +15,26 @@ import { RouterLink } from '@angular/router';
         </div>
 
         <div class="status-copy">
-          <span class="page-eyebrow">Acces refuse</span>
-          <h1 class="page-title">Vous n'avez pas les droits pour ouvrir cette page.</h1>
+          <span class="page-eyebrow">{{ 'accessDenied.eyebrow' | translate }}</span>
+          <h1 class="page-title">{{ 'accessDenied.title' | translate }}</h1>
           <p class="page-subtitle">
-            Votre session est active, mais le role associe ne permet pas d'utiliser cette action.
+            {{ 'accessDenied.message' | translate }}
           </p>
         </div>
 
-        <div class="status-actions" role="group" aria-label="Navigation depuis la page acces refuse">
+        <div
+          class="status-actions"
+          role="group"
+          [attr.aria-label]="'accessDenied.navigationLabel' | translate"
+        >
           <a mat-flat-button routerLink="/persons">
             <mat-icon aria-hidden="true">groups</mat-icon>
-            Annuaire
+            {{ 'common.directory' | translate }}
           </a>
 
           <a mat-button routerLink="/">
             <mat-icon aria-hidden="true">home</mat-icon>
-            Accueil
+            {{ 'common.backHome' | translate }}
           </a>
         </div>
       </div>

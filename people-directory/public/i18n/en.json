@@ -1,0 +1,211 @@
+{
+  "app": {
+    "title": "People directory",
+    "tagline": "Material foundations for a clear CRUD workspace",
+    "skipToMain": "Skip to main content",
+    "nav": {
+      "directory": "Directory",
+      "newPerson": "New person",
+      "login": "Login",
+      "profile": "Profile",
+      "logout": "Logout"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "authorized": "Allowed",
+    "avatar": "Avatar",
+    "avatarOf": "Avatar of {{ name }}",
+    "backHome": "Home",
+    "backToDirectory": "Back to directory",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "directory": "Directory",
+    "edit": "Edit",
+    "email": "Email",
+    "error": "Error",
+    "firstName": "First name",
+    "identifier": "Identifier",
+    "language": "Language",
+    "lastName": "Last name",
+    "loadingContent": "Loading content",
+    "notFilled": "Not provided",
+    "notAuthorized": "Not allowed",
+    "phone": "Phone",
+    "retry": "Retry",
+    "role": "Role",
+    "save": "Save",
+    "security": "Security",
+    "status": "Status",
+    "view": "View"
+  },
+  "language": {
+    "selection": "Language selection",
+    "fr": "Français",
+    "en": "English"
+  },
+  "state": {
+    "empty": {
+      "kicker": "No content",
+      "title": "Nothing to show",
+      "message": "Content will appear here as soon as data is available."
+    },
+    "error": {
+      "kicker": "Error",
+      "title": "Something went wrong",
+      "message": "Please try again or come back later."
+    },
+    "loading": {
+      "title": "Loading",
+      "message": "Please wait while the content is prepared."
+    }
+  },
+  "accessDenied": {
+    "eyebrow": "Access denied",
+    "title": "You do not have permission to open this page.",
+    "message": "Your session is active, but the assigned role cannot use this action.",
+    "navigationLabel": "Navigation from the access denied page"
+  },
+  "notFound": {
+    "eyebrow": "Page not found",
+    "title": "This address does not match any page.",
+    "message": "The link may be outdated or the address contains a mistake.",
+    "navigationLabel": "Navigation from the not found page"
+  },
+  "persons": {
+    "fields": {
+      "avatarUrl": "Photo URL",
+      "birthDate": "Birth date",
+      "fullName": "Full name"
+    },
+    "list": {
+      "eyebrow": "Directory",
+      "title": "Browse and manage people in one place.",
+      "newPerson": "New person",
+      "searchTitle": "Search",
+      "searchLabel": "Search for a person",
+      "searchPlaceholder": "Search by name, email, or phone",
+      "searchHint": "Search by name, email, or phone.",
+      "clearSearch": "Clear search",
+      "resultsTitle": "Results",
+      "loadingTitle": "Loading people",
+      "loadingMessage": "Directory data is loading.",
+      "loadErrorTitle": "The directory could not be loaded",
+      "loadErrorMessage": "Try again to retrieve the people list with the current filters.",
+      "emptyKicker": "No results",
+      "emptySearchTitle": "No person matches your search",
+      "emptySearchMessage": "Try another search term or clear the current search.",
+      "emptyDirectoryTitle": "No people in the directory yet",
+      "emptyDirectoryMessage": "Create the first person to start filling the directory.",
+      "createFirstPerson": "Create the first person",
+      "tableLabel": "People list",
+      "tableCaption": "Search results from the people directory.",
+      "personIdentifier": "Identifier: {{ id }}",
+      "viewPerson": "View {{ name }}'s record",
+      "editPerson": "Edit {{ name }}'s record",
+      "deletePerson": "Delete {{ name }}'s record",
+      "paginationLabel": "People pagination"
+    },
+    "detail": {
+      "personCard": "Person record",
+      "actionsLabel": "Person actions",
+      "coordinates": "Contact details",
+      "mainInformation": "Main information",
+      "metadata": "Metadata",
+      "tracking": "Record tracking",
+      "createdAt": "Created on",
+      "updatedAt": "Updated on",
+      "loadingTitle": "Loading person",
+      "loadingMessage": "Data is loading.",
+      "notFoundKicker": "Not found",
+      "notFoundTitle": "Person not found",
+      "notFoundMessage": "This record no longer exists or the identifier does not match any person.",
+      "loadErrorTitle": "The person could not be loaded",
+      "loadErrorMessage": "Try again to retrieve the data."
+    },
+    "create": {
+      "eyebrow": "New person",
+      "title": "Add a person to the directory.",
+      "subtitle": "Fill in the main information before creating the record.",
+      "formEyebrow": "Form",
+      "formTitle": "Person information"
+    },
+    "edit": {
+      "eyebrow": "Edit person",
+      "title": "Edit a person in the directory"
+    },
+    "form": {
+      "validationSummary": "Check the highlighted fields before saving the person.",
+      "firstNameRequired": "First name is required.",
+      "firstNameMaxLength": "First name cannot exceed 30 characters.",
+      "lastNameRequired": "Last name is required.",
+      "lastNameMaxLength": "Last name cannot exceed 30 characters.",
+      "phoneHint": "Example: +32 477 12 34 56",
+      "phoneRequired": "Phone number is required.",
+      "phoneMaxLength": "Phone number cannot exceed 30 characters.",
+      "emailRequired": "Email is required.",
+      "emailMaxLength": "Email cannot exceed 60 characters.",
+      "emailInvalid": "Email is not valid.",
+      "birthDateRequired": "Birth date is required.",
+      "birthDateFuture": "The date cannot be in the future.",
+      "birthDateInvalid": "The entered date is not valid.",
+      "avatarRequired": "Avatar is required.",
+      "avatarInvalidUrl": "The URL must be valid.",
+      "saving": "Saving...",
+      "createSubmit": "Create person",
+      "editSubmit": "Edit person"
+    },
+    "deleteDialog": {
+      "title": "Delete this person?",
+      "description": "This action will permanently delete {{ name }}."
+    },
+    "snackbar": {
+      "created": "Person created.",
+      "createError": "Could not create the person.",
+      "updated": "Person updated.",
+      "updateError": "Could not update the person.",
+      "deleted": "Person deleted.",
+      "deleteError": "Could not delete the person."
+    }
+  },
+  "profile": {
+    "eyebrow": "Profile",
+    "subtitle": "Information from the active security session.",
+    "actionsLabel": "Profile actions",
+    "identity": "Identity",
+    "mainInformation": "Main information",
+    "permissions": "Permissions",
+    "availableActions": "Available actions",
+    "securityTitle": "Rights and identifiers",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "administrator": "Administrator",
+    "user": "User",
+    "fallbackName": "User profile",
+    "fallbackInitials": "UP",
+    "permissionsList": {
+      "directory": {
+        "label": "View the directory",
+        "description": "See the people list and use search."
+      },
+      "detail": {
+        "label": "View a record",
+        "description": "Open the full details of a person."
+      },
+      "create": {
+        "label": "Create a person",
+        "description": "Add a new record to the directory."
+      },
+      "edit": {
+        "label": "Edit a person",
+        "description": "Edit the information of an existing record."
+      },
+      "delete": {
+        "label": "Delete a person",
+        "description": "Permanently remove a record after confirmation."
+      }
+    }
+  }
+}

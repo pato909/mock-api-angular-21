@@ -1,10 +1,11 @@
 import {
   ApplicationConfig,
+  importProvidersFrom,
   inject,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
@@ -18,6 +19,8 @@ import {
 import { AppDateAdapter } from './shared/date/app-date-adapter';
 import { SecurityService } from './core/security/security.service';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
+import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 const APP_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -47,5 +50,13 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(APP_DATE_FORMATS),
     { provide: DateAdapter, useClass: AppDateAdapter },
     provideAppInitializer(() => inject(SecurityService).login()),
+    provideTranslateService({
+      fallbackLang: 'fr',
+      loader: provideTranslateHttpLoader({
+        useHttpBackend: true,
+        suffix: '.json',
+        prefix: './i18n/',
+      }),
+    })
   ],
 };

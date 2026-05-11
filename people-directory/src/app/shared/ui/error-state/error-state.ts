@@ -1,23 +1,24 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-error-state',
-  imports: [MatButtonModule, MatCardModule],
+  imports: [MatButtonModule, MatCardModule, TranslatePipe],
   template: `
     <mat-card class="state-card">
       <mat-card-content class="state-layout">
-        <span class="state-kicker">{{ kicker() }}</span>
+        <span class="state-kicker">{{ kicker() | translate }}</span>
 
         <div class="state-copy">
-          <h3>{{ title() }}</h3>
-          <p>{{ message() }}</p>
+          <h3>{{ title() | translate }}</h3>
+          <p>{{ message() | translate }}</p>
         </div>
 
         @if (actionLabel()) {
           <button mat-stroked-button type="button" (click)="retry.emit()">
-            {{ actionLabel() }}
+            {{ actionLabel() | translate }}
           </button>
         }
       </mat-card-content>
@@ -66,9 +67,9 @@ import { MatCardModule } from '@angular/material/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorStateComponent {
-  readonly kicker = input('Erreur');
-  readonly title = input('Une erreur est survenue');
-  readonly message = input('Veuillez reessayer ou revenir plus tard.');
+  readonly kicker = input('state.error.kicker');
+  readonly title = input('state.error.title');
+  readonly message = input('state.error.message');
   readonly actionLabel = input('');
   readonly retry = output<void>();
 }

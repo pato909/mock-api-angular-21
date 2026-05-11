@@ -1,5 +1,5 @@
 <div class="shell-backdrop">
-  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+  <a class="skip-link" href="#main-content">{{ 'app.skipToMain' | translate }}</a>
 
   <main class="app-shell page-shell">
     <mat-toolbar class="app-header">
@@ -7,16 +7,16 @@
         <div class="brand-mark">PD</div>
 
         <div class="brand-copy">
-          <span class="app-name">People Directory</span>
-          <span class="app-tagline">Material foundations for a clear CRUD workspace</span>
+          <span class="app-name">{{ 'app.title' | translate }}</span>
+          <span class="app-tagline">{{ 'app.tagline' | translate }}</span>
         </div>
       </div>
 
       <div class="header-actions">
-        <a mat-button routerLink="/persons">Directory</a>
-        <a mat-flat-button routerLink="/persons/new">New person</a>
+        <a mat-button routerLink="/persons">{{ 'app.nav.directory' | translate }}</a>
+        <a mat-flat-button routerLink="/persons/new">{{ 'app.nav.newPerson' | translate }}</a>
         @if (!securityService.isConnected()) {
-          <a mat-button (click)="forceLogin()">Login</a>
+          <a mat-button (click)="forceLogin()">{{ 'app.nav.login' | translate }}</a>
         } @else {
           <!-- Menu déroulant -->
           <button mat-button [matMenuTriggerFor]="userMenu">
@@ -27,16 +27,17 @@
 
           <mat-menu #userMenu="matMenu">
             <button mat-menu-item routerLink="/profile">
-              <mat-icon >person</mat-icon>
-              <span>Profil</span>
+              <mat-icon>person</mat-icon>
+              <span>{{ 'app.nav.profile' | translate }}</span>
             </button>
             <mat-divider />
             <button mat-menu-item (click)="securityService.logout()">
               <mat-icon>logout</mat-icon>
-              <span>Logout</span>
+              <span>{{ 'app.nav.logout' | translate }}</span>
             </button>
           </mat-menu>
         }
+        <app-language-switcher />
       </div>
     </mat-toolbar>
 

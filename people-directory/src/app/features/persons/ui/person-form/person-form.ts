@@ -19,6 +19,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { notFutureDateValidator } from '../../../../shared/validators/date.validators';
 import { avatarUrlValidator } from '../../../../shared/validators/url.validators';
 import { Person } from '../../model/person.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-person-form',
@@ -33,6 +34,7 @@ import { Person } from '../../model/person.model';
     MatSuffix,
     MatDatepickerModule,
     MatNativeDateModule,
+    TranslatePipe,
   ],
   template: `
     <form
@@ -44,45 +46,45 @@ import { Person } from '../../model/person.model';
     >
       @if (showValidationSummary()) {
         <p class="person-form__validation-summary" role="alert">
-          Verifiez les champs signales avant d'enregistrer la personne.
+          {{ 'persons.form.validationSummary' | translate }}
         </p>
       }
 
       <mat-form-field appearance="outline" class="person-form__field">
-        <mat-label>Prenom</mat-label>
+        <mat-label>{{ 'common.firstName' | translate }}</mat-label>
         <input matInput formControlName="firstName" autocomplete="given-name" />
 
         @if (form.controls.firstName.hasError('required') && form.controls.firstName.touched) {
-          <mat-error>Le prenom est obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.firstNameRequired' | translate }}</mat-error>
         }
 
         @if (form.controls.firstName.hasError('maxlength') && form.controls.firstName.touched) {
-          <mat-error>Le prenom ne peut pas depasser 30 caracteres.</mat-error>
+          <mat-error>{{ 'persons.form.firstNameMaxLength' | translate }}</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
-        <mat-label>Nom de famille</mat-label>
+        <mat-label>{{ 'common.lastName' | translate }}</mat-label>
         <input matInput formControlName="lastName" autocomplete="family-name" />
 
         @if (form.controls.lastName.hasError('required') && form.controls.lastName.touched) {
-          <mat-error>Le nom de famille est obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.lastNameRequired' | translate }}</mat-error>
         }
 
         @if (form.controls.lastName.hasError('maxlength') && form.controls.lastName.touched) {
-          <mat-error>Le nom de famille ne peut pas depasser 30 caracteres.</mat-error>
+          <mat-error>{{ 'persons.form.lastNameMaxLength' | translate }}</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
-        <mat-label>Telephone</mat-label>
+        <mat-label>{{ 'common.phone' | translate }}</mat-label>
         <input matInput formControlName="phone" autocomplete="tel" />
-        <mat-hint>Exemple : +32 477 12 34 56</mat-hint>
+        <mat-hint>{{ 'persons.form.phoneHint' | translate }}</mat-hint>
 
         @if (form.controls.phone.hasError('required') && form.controls.phone.touched) {
-          <mat-error>Le numéro de télephone est obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.phoneRequired' | translate }}</mat-error>
         }
 
         @if (form.controls.phone.hasError('maxlength') && form.controls.phone.touched) {
-          <mat-error>Le numéro de télephone ne peut pas depasser 30 caracteres.</mat-error>
+          <mat-error>{{ 'persons.form.phoneMaxLength' | translate }}</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
@@ -91,18 +93,18 @@ import { Person } from '../../model/person.model';
         <mat-hint>aa.bb&#64;cc.com</mat-hint>
 
         @if (form.controls.email.hasError('required') && form.controls.email.touched) {
-          <mat-error>L'email est obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.emailRequired' | translate }}</mat-error>
         }
 
         @if (form.controls.email.hasError('maxlength') && form.controls.email.touched) {
-          <mat-error>L'email ne peut pas depasser 60 caracteres.</mat-error>
+          <mat-error>{{ 'persons.form.emailMaxLength' | translate }}</mat-error>
         }
         @if (form.controls.email.hasError('email') && form.controls.email.touched) {
-          <mat-error>L'email n'est pas valide.</mat-error>
+          <mat-error>{{ 'persons.form.emailInvalid' | translate }}</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline" class="person-form__field">
-        <mat-label>Date de naissance</mat-label>
+        <mat-label>{{ 'persons.fields.birthDate' | translate }}</mat-label>
 
         <input
           matInput
@@ -116,34 +118,41 @@ import { Person } from '../../model/person.model';
         <mat-datepicker #birthDatePicker></mat-datepicker>
 
         @if (form.controls.birthDate.hasError('required') && form.controls.birthDate.touched) {
-          <mat-error>La date de naissance est obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.birthDateRequired' | translate }}</mat-error>
         }
         @if (form.controls.birthDate.hasError('futureDate') && form.controls.birthDate.touched) {
-          <mat-error>La date ne peut pas être dans le futur </mat-error>
+          <mat-error>{{ 'persons.form.birthDateFuture' | translate }}</mat-error>
         }
         @if (
           form.controls.birthDate.hasError('matDatepickerParse') && form.controls.birthDate.touched
         ) {
-          <mat-error>La date saisie n'est pas valide.</mat-error>
+          <mat-error>{{ 'persons.form.birthDateInvalid' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="person-form__field">
         <mat-label>Avatar</mat-label>
         <input matInput formControlName="avatar" type="url" autocomplete="url" />
-        <mat-hint>URL de la photo</mat-hint>
+        <mat-hint>{{ 'persons.fields.avatarUrl' | translate }}</mat-hint>
 
         @if (form.controls.avatar.hasError('required') && form.controls.avatar.touched) {
-          <mat-error>Avatar obligatoire.</mat-error>
+          <mat-error>{{ 'persons.form.avatarRequired' | translate }}</mat-error>
         }
         @if (form.controls.avatar.hasError('invalidUrl') && form.controls.avatar.touched) {
-          <mat-error>L'URL doit être valide.</mat-error>
+          <mat-error>{{ 'persons.form.avatarInvalidUrl' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <div class="person-form__actions">
         <button mat-flat-button type="submit" [disabled]="isSubmitting()">
-          {{ submitLabel() }}
+          {{
+            (isSubmitting()
+              ? 'persons.form.saving'
+              : isEditMode()
+                ? 'persons.form.editSubmit'
+                : 'persons.form.createSubmit'
+            ) | translate
+          }}
         </button>
       </div>
     </form>
@@ -187,14 +196,6 @@ export class PersonForm {
   readonly person = input<Person | undefined>(undefined);
 
   readonly isEditMode = computed(() => !!this.person());
-  readonly submitLabel = computed(() =>
-    this.isSubmitting()
-      ? 'Enregistrement...'
-      : this.isEditMode()
-        ? 'Modifier la personne'
-        : 'Creer la personne',
-  );
-
   readonly form = new FormGroup({
     firstName: new FormControl('', {
       nonNullable: true,

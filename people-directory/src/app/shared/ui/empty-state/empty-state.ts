@@ -1,23 +1,24 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-empty-state',
-  imports: [MatButtonModule, MatCardModule],
+  imports: [MatButtonModule, MatCardModule, TranslatePipe],
   template: `
     <mat-card class="state-card">
       <mat-card-content class="state-layout">
-        <span class="state-kicker">{{ kicker() }}</span>
+        <span class="state-kicker">{{ kicker() | translate }}</span>
 
         <div class="state-copy">
-          <h3>{{ title() }}</h3>
-          <p>{{ message() }}</p>
+          <h3>{{ title() | translate }}</h3>
+          <p>{{ message() | translate }}</p>
         </div>
 
         @if (actionLabel()) {
           <button mat-flat-button type="button" (click)="action.emit()">
-            {{ actionLabel() }}
+            {{ actionLabel() | translate }}
           </button>
         }
       </mat-card-content>
@@ -66,9 +67,9 @@ import { MatCardModule } from '@angular/material/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyStateComponent {
-  readonly kicker = input('Aucun contenu');
-  readonly title = input('Rien a afficher');
-  readonly message = input('Le contenu apparaitra ici des que des donnees seront disponibles.');
+  readonly kicker = input('state.empty.kicker');
+  readonly title = input('state.empty.title');
+  readonly message = input('state.empty.message');
   readonly actionLabel = input('');
   readonly action = output<void>();
 }

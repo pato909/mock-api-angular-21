@@ -28,6 +28,7 @@ import { PersonsApiService } from '../../data/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
 import { SecurityService } from '../../../../core/security/security.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-persons-list-page',
@@ -45,6 +46,7 @@ import { SecurityService } from '../../../../core/security/security.service';
     MatIcon,
     MatPaginatorModule,
     PersonAvatar,
+    TranslatePipe,
   ],
   styles: `
     .page-search-field {
@@ -108,40 +110,44 @@ import { SecurityService } from '../../../../core/security/security.service';
   template: `
     <section class="page-section">
       <div class="page-hero">
-        <span class="page-eyebrow">Annuaire</span>
-        <h1 class="page-title">Parcourir et gerer les personnes en un seul endroit.</h1>
+        <span class="page-eyebrow">{{ 'persons.list.eyebrow' | translate }}</span>
+        <h1 class="page-title">{{ 'persons.list.title' | translate }}</h1>
 
         <div class="page-hero__actions">
-          <a mat-flat-button routerLink="/persons/new">Nouvelle personne</a>
+          <a mat-flat-button routerLink="/persons/new">{{
+            'persons.list.newPerson' | translate
+          }}</a>
         </div>
       </div>
 
       <section class="page-panel">
         <div class="section-header">
           <div class="page-section">
-            <h2 class="section-title">Recherche</h2>
+            <h2 class="section-title">{{ 'persons.list.searchTitle' | translate }}</h2>
           </div>
         </div>
 
         <div class="page-panel__content">
           <mat-form-field appearance="outline" class="page-search-field">
-            <mat-label>Rechercher une personne</mat-label>
+            <mat-label>{{ 'persons.list.searchLabel' | translate }}</mat-label>
             <input
               #searchInput
               matInput
               type="text"
-              placeholder="Rechercher par nom, email ou telephone"
+              [placeholder]="'persons.list.searchPlaceholder' | translate"
               aria-describedby="persons-search-hint"
               [value]="this.searchInput()"
               (input)="updateSearch(searchInput.value)"
             />
-            <mat-hint id="persons-search-hint">Recherche par nom, email ou telephone.</mat-hint>
+            <mat-hint id="persons-search-hint">{{
+              'persons.list.searchHint' | translate
+            }}</mat-hint>
             @if (this.searchInput()) {
               <button
                 mat-icon-button
                 matSuffix
                 type="button"
-                aria-label="Effacer la recherche"
+                [attr.aria-label]="'persons.list.clearSearch' | translate"
                 (click)="clearSearch()"
               >
                 <mat-icon>close</mat-icon>
@@ -154,39 +160,41 @@ import { SecurityService } from '../../../../core/security/security.service';
       <section class="page-panel">
         <div class="section-header">
           <div class="page-section">
-            <h2 class="section-title">Resultats</h2>
+            <h2 class="section-title">{{ 'persons.list.resultsTitle' | translate }}</h2>
           </div>
         </div>
 
         <div class="page-panel__content">
           @if (persons.isLoading()) {
             <app-loading-state
-              title="Chargement des personnes"
-              message="Les donnees de l'annuaire sont en cours de chargement."
+              title="persons.list.loadingTitle"
+              message="persons.list.loadingMessage"
             />
           } @else if (persons.error()) {
             <app-error-state
-              kicker="Erreur"
-              title="Le chargement de l'annuaire a echoue"
-              message="Reessayez pour recuperer la liste des personnes avec les filtres actuels."
-              actionLabel="Reessayer"
+              kicker="common.error"
+              title="persons.list.loadErrorTitle"
+              message="persons.list.loadErrorMessage"
+              actionLabel="common.retry"
               (retry)="retryPersonsList()"
             />
           } @else if (rows().length === 0) {
             <app-empty-state
-              kicker="Aucun resultat"
+              kicker="persons.list.emptyKicker"
               [title]="
                 query().search.trim()
-                  ? 'Aucune personne ne correspond a votre recherche'
-                  : 'Aucune personne dans l annuaire pour le moment'
+                  ? 'persons.list.emptySearchTitle'
+                  : 'persons.list.emptyDirectoryTitle'
               "
               [message]="
                 query().search.trim()
-                  ? 'Essayez un autre terme de recherche ou effacez la recherche courante.'
-                  : 'Creez une premiere personne pour commencer a alimenter l annuaire.'
+                  ? 'persons.list.emptySearchMessage'
+                  : 'persons.list.emptyDirectoryMessage'
               "
               [actionLabel]="
-                query().search.trim() ? 'Effacer la recherche' : 'Creer la premiere personne'
+                query().search.trim()
+                  ? 'persons.list.clearSearch'
+                  : 'persons.list.createFirstPerson'
               "
               (action)="query().search.trim() ? clearSearch() : goToCreate()"
             />
@@ -196,17 +204,19 @@ import { SecurityService } from '../../../../core/security/security.service';
                 mat-table
                 [dataSource]="rows()"
                 class="persons-table"
-                aria-label="Liste des personnes"
+                [attr.aria-label]="'persons.list.tableLabel' | translate"
                 matSort
                 [matSortActive]="sortActive()"
                 [matSortDirection]="query().order"
                 (matSortChange)="updateSort($event.active, $event.direction)"
               >
                 <caption class="sr-only">
-                  Resultats de recherche de l'annuaire des personnes.
+                  {{
+                    'persons.list.tableCaption' | translate
+                  }}
                 </caption>
                 <ng-container matColumnDef="avatar">
-                  <th mat-header-cell *matHeaderCellDef>Avatar</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'common.avatar' | translate }}</th>
                   <td mat-cell *matCellDef="let person">
                     <app-person-avatar
                       [avatar]="person.avatar"
@@ -217,24 +227,32 @@ import { SecurityService } from '../../../../core/security/security.service';
                 </ng-container>
 
                 <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Nom complet</th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="name">
+                    {{ 'persons.fields.fullName' | translate }}
+                  </th>
                   <td mat-cell *matCellDef="let person">
                     <div class="person-name">
                       <span>{{ person.firstName }} {{ person.lastName }}</span>
-                      <span class="person-secondary">Identifiant : {{ person.id }}</span>
+                      <span class="person-secondary">{{
+                        'persons.list.personIdentifier' | translate: { id: person.id }
+                      }}</span>
                     </div>
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
+                    {{ 'common.email' | translate }}
+                  </th>
                   <td mat-cell *matCellDef="let person">
                     {{ person.email }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">Telephone</th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">
+                    {{ 'common.phone' | translate }}
+                  </th>
                   <td mat-cell *matCellDef="let person">
                     {{ person.phone }}
                   </td>
@@ -242,7 +260,7 @@ import { SecurityService } from '../../../../core/security/security.service';
 
                 <ng-container matColumnDef="birthDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header="birthDate">
-                    Date de naissance
+                    {{ 'persons.fields.birthDate' | translate }}
                   </th>
                   <td mat-cell *matCellDef="let person">
                     {{ person.birthDate | date: 'dd/MM/yyyy' }}
@@ -250,36 +268,48 @@ import { SecurityService } from '../../../../core/security/security.service';
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ 'common.actions' | translate }}</th>
                   <td mat-cell *matCellDef="let person">
                     <div class="person-actions">
                       <a
                         mat-button
                         [routerLink]="['/persons', person.id]"
-                        [attr.aria-label]="'Voir la fiche de ' + fullName(person)"
+                        [attr.aria-label]="
+                          'persons.list.viewPerson' | translate: { name: fullName(person) }
+                        "
                         [disabled]="!securityService.isConnected()"
                       >
-                        Voir
+                        {{ 'common.view' | translate }}
                       </a>
                       <a
                         mat-button
                         [routerLink]="['/persons', person.id, 'edit']"
-                        [attr.aria-label]="'Modifier la fiche de ' + fullName(person)"
+                        [attr.aria-label]="
+                          'persons.list.editPerson' | translate: { name: fullName(person) }
+                        "
                         [disabled]="
                           !securityService.isConnected() ||
                           (securityService.isConnected() && !securityService.user().admin)
                         "
                       >
-                        Modifier
+                        {{ 'common.edit' | translate }}
                       </a>
                       <button
                         mat-button
                         type="button"
-                        [disabled]="isDeleting(person.id) || (!securityService.isConnected() || (securityService.isConnected() && !securityService.user().admin))"
-                        [attr.aria-label]="'Supprimer la fiche de ' + fullName(person)"
+                        [disabled]="
+                          isDeleting(person.id) ||
+                          !securityService.isConnected() ||
+                            (securityService.isConnected() && !securityService.user().admin)
+                        "
+                        [attr.aria-label]="
+                          'persons.list.deletePerson' | translate: { name: fullName(person) }
+                        "
                         (click)="deletePerson(person)"
                       >
-                        {{ isDeleting(person.id) ? 'Suppression...' : 'Supprimer' }}
+                        {{
+                          (isDeleting(person.id) ? 'common.deleting' : 'common.delete') | translate
+                        }}
                       </button>
                     </div>
                   </td>
@@ -293,7 +323,7 @@ import { SecurityService } from '../../../../core/security/security.service';
                 [pageSize]="query().limit"
                 [pageSizeOptions]="[5, 10, 25, 50]"
                 [length]="countResource()"
-                aria-label="Pagination des personnes"
+                [attr.aria-label]="'persons.list.paginationLabel' | translate"
                 (page)="updatePage($event.pageIndex, $event.pageSize)"
               />
             </div>
@@ -326,6 +356,7 @@ export class PersonsListPage {
 
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
   protected readonly deletingPersonId = signal<string | null>(null);
 
   rows = computed(() => this.persons.value() ?? []);
@@ -427,16 +458,24 @@ export class PersonsListPage {
       )
       .subscribe({
         next: () => {
-          this.snackBar.open('Personne supprimee.', 'Fermer', {
-            duration: 3000,
-          });
+          this.snackBar.open(
+            this.translate.instant('persons.snackbar.deleted'),
+            this.translate.instant('common.close'),
+            {
+              duration: 3000,
+            },
+          );
           this.personsResources.reloadPersons();
           this.personsResources.reloadPersonsCount();
         },
         error: () => {
-          this.snackBar.open('Impossible de supprimer la personne.', 'Fermer', {
-            duration: 3000,
-          });
+          this.snackBar.open(
+            this.translate.instant('persons.snackbar.deleteError'),
+            this.translate.instant('common.close'),
+            {
+              duration: 3000,
+            },
+          );
         },
       });
   }

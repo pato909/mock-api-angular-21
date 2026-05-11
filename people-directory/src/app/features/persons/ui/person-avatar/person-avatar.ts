@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 type AvatarVariant = 'list' | 'detail';
 
@@ -61,6 +62,8 @@ type AvatarVariant = 'list' | 'detail';
   `,
 })
 export class PersonAvatar {
+  private readonly translate = inject(TranslateService);
+
   readonly firstName = input.required<string>();
   readonly lastName = input.required<string>();
   readonly avatar = input.required<string>();
@@ -86,6 +89,8 @@ export class PersonAvatar {
   }
 
   readonly accessibleLabel = computed(() =>
-    `Avatar de ${this.firstName().trim()} ${this.lastName().trim()}`.trim(),
+    this.translate.instant('common.avatarOf', {
+      name: `${this.firstName().trim()} ${this.lastName().trim()}`.trim(),
+    }),
   );
 }

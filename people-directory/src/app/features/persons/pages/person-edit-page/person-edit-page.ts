@@ -9,6 +9,7 @@ import { PersonsResources } from '../../data/persons-resources';
 import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
 import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-person-edit-page',
@@ -19,45 +20,48 @@ import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loadi
     EmptyStateComponent,
     ErrorStateComponent,
     LoadingStateComponent,
+    TranslatePipe,
   ],
   template: `
     <section class="page-section">
       <div class="page-hero">
-        <span class="page-eyebrow">Edition personne</span>
-        <h1 class="page-title">Modifier une personne de l'annuaire</h1>
+        <span class="page-eyebrow">{{ 'persons.edit.eyebrow' | translate }}</span>
+        <h1 class="page-title">{{ 'persons.edit.title' | translate }}</h1>
 
         <div class="page-hero__actions">
-          <a mat-stroked-button routerLink="/persons">Retour a l'annuaire</a>
+          <a mat-stroked-button routerLink="/persons">{{ 'common.backToDirectory' | translate }}</a>
         </div>
       </div>
 
       <section class="page-panel" aria-labelledby="edit-person-title">
         <div class="section-header">
           <div class="page-section">
-            <span class="page-eyebrow">Formulaire</span>
-            <h2 id="edit-person-title" class="section-title">Informations de la personne</h2>
+            <span class="page-eyebrow">{{ 'persons.create.formEyebrow' | translate }}</span>
+            <h2 id="edit-person-title" class="section-title">
+              {{ 'persons.create.formTitle' | translate }}
+            </h2>
           </div>
         </div>
         <div class="page-panel__content">
           @if (person.isLoading()) {
             <app-loading-state
-              title="Chargement de la personne"
-              message="Les donnees sont en cours de chargement."
+              title="persons.detail.loadingTitle"
+              message="persons.detail.loadingMessage"
             />
           } @else if (isNotFound()) {
             <app-empty-state
-              kicker="Introuvable"
-              title="Personne introuvable"
-              message="Cette fiche n'existe plus ou l'identifiant ne correspond a aucune personne."
-              actionLabel="Retour a l'annuaire"
+              kicker="persons.detail.notFoundKicker"
+              title="persons.detail.notFoundTitle"
+              message="persons.detail.notFoundMessage"
+              actionLabel="common.backToDirectory"
               (action)="goToPersonsList()"
             />
           } @else if (person.error()) {
             <app-error-state
-              kicker="Erreur"
-              title="Le chargement de la personne a échoué"
-              message="Reessayez pour récupérer les données."
-              actionLabel="Reessayer"
+              kicker="common.error"
+              title="persons.detail.loadErrorTitle"
+              message="persons.detail.loadErrorMessage"
+              actionLabel="common.retry"
               (retry)="retryPersonDetail()"
             />
           } @else {
@@ -81,6 +85,7 @@ export class PersonEditPage {
 
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   readonly isSubmitting = signal(false);
 
@@ -101,18 +106,26 @@ export class PersonEditPage {
     this.personService.update(id, payload).subscribe({
       next: (person) => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Personne modifiee.', 'Fermer', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          this.translate.instant('persons.snackbar.updated'),
+          this.translate.instant('common.close'),
+          {
+            duration: 3000,
+          },
+        );
 
         this.personsResources.reloadPersonDetail();
         void this.router.navigate(['/persons', person.id]);
       },
       error: () => {
         this.isSubmitting.set(false);
-        this.snackBar.open('Impossible de modifier la personne.', 'Fermer', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          this.translate.instant('persons.snackbar.updateError'),
+          this.translate.instant('common.close'),
+          {
+            duration: 3000,
+          },
+        );
       },
     });
   }

@@ -6,6 +6,9 @@ import { SecurityService } from './core/security/security.service';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/list';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageService } from './core/language/language.service';
+import { LanguageSwitcherComponent } from './shared/language-switcher/language-switcher-component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +22,8 @@ import { MatDivider } from '@angular/material/list';
     MatMenu,
     MatMenuItem,
     MatDivider,
+    TranslatePipe,
+    LanguageSwitcherComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -26,6 +31,11 @@ import { MatDivider } from '@angular/material/list';
 })
 export class App {
   securityService = inject(SecurityService);
+  private readonly languageService = inject(LanguageService);
+
+  constructor() {
+    this.languageService.init();
+  }
 
   logout() {
     this.securityService.logout();
