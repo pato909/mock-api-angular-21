@@ -1,31 +1,8 @@
-import { Router, Routes } from '@angular/router';
-import { inject } from '@angular/core';
-import { SecurityService } from './core/security/security.service';
+import { Routes } from '@angular/router';
+import { adminGuard, connectedGuard } from './core/security/guards/security.guards';
 import { AccessDeniedComponent } from './shared/ui/access-denied/access-denied';
 import { NotFoundComponent } from './shared/ui/not-found/not-found';
 
-export function adminGuard() {
-  const securityService = inject(SecurityService);
-  const router = inject(Router);
-
-  if (securityService.isConnected() && securityService.user().admin) {
-    return true;
-  }
-
-  return router.parseUrl('/denied');
-}
-
-
-export function connectedGuard() {
-  const securityService = inject(SecurityService);
-  const router = inject(Router);
-
-  if (securityService.isConnected()) {
-    return true;
-  }
-
-  return router.parseUrl('/denied');
-}
 export const routes: Routes = [
   { path: '', redirectTo: 'persons', pathMatch: 'full' },
   {

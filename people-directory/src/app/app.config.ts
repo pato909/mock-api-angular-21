@@ -1,11 +1,10 @@
 import {
   ApplicationConfig,
-  importProvidersFrom,
   inject,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
@@ -19,8 +18,9 @@ import {
 import { AppDateAdapter } from './shared/date/app-date-adapter';
 import { SecurityService } from './core/security/security.service';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
-import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { API_BASE_URL } from './core/api/api.config';
 
 const APP_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -40,7 +40,7 @@ export const appConfig: ApplicationConfig = {
     provideOAuthClient({
       resourceServer: {
         sendAccessToken: true,
-        allowedUrls: ['https://69ca6329ba5984c44bf30fe2.mockapi.io/api/v1/'],
+        allowedUrls: [`${API_BASE_URL}/`],
       },
     }),
     provideHttpClient(withInterceptorsFromDi()),
@@ -57,6 +57,6 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json',
         prefix: './i18n/',
       }),
-    })
+    }),
   ],
 };

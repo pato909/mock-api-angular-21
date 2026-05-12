@@ -2,7 +2,7 @@ import { computed, DestroyRef, inject, Injectable, Signal, signal } from '@angul
 import { AuthConfig, OAuthEvent, OAuthService } from 'angular-oauth2-oidc';
 import { AppUser } from './app-user';
 import { ScopeEnum } from './scope.enum';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -173,13 +173,27 @@ export class SecurityService {
   }
 
   private isProtectedPath(path: string): boolean {
-    return (
-      path === '/profile' ||
-      path === '/persons/new' ||
-      /^\/persons\/[^/]+$/.test(path) ||
-      /^\/persons\/[^/]+\/edit$/.test(path)
-    );
+    return this.router.config.some((route) => routeMatchesPath(route, path) && hasGuard(route));
   }
+}
+
+function hasGuard(route: Route): boolean {
+  return Boolean(route.canActivate?.length);
+}
+
+function routeMatchesPath(route: Route, path: string): boolean {
+  if (!route.path || route.path === '**') {
+    return false;
+  }
+
+  const routeSegments = route.path.split('/');
+  const pathSegments = path.replace(/^\/|\/$/g, '').split('/');
+
+  if (routeSegments.length !== pathSegments.length) {
+    return false;
+  }
+
+  return routeSegments.every((segment, index) => segment.startsWith(':') || segment === pathSegments[index]);
 }
 
 interface IdentityClaims {

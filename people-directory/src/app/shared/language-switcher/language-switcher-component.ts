@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { LanguageService } from '../../core/language/language.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-language-switcher',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
   template: `
     <div class="language-switcher" [attr.aria-label]="'language.selection' | translate">

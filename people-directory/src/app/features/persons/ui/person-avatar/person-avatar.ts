@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 type AvatarVariant = 'list' | 'detail';
 
 @Component({
   selector: 'app-person-avatar',
-  imports: [],
+  imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span class="person-avatar" [class.person-avatar--detail]="variant() === 'detail'">
@@ -13,11 +13,15 @@ type AvatarVariant = 'list' | 'detail';
         <img
           class="person-avatar__image"
           [src]="avatar()"
-          [alt]="accessibleLabel()"
+          [alt]="'common.avatarOf' | translate: { name: fullName() }"
           (error)="markImageAsFailed()"
         />
       } @else {
-        <span class="person-avatar__fallback" role="img" [attr.aria-label]="accessibleLabel()">
+        <span
+          class="person-avatar__fallback"
+          role="img"
+          [attr.aria-label]="'common.avatarOf' | translate: { name: fullName() }"
+        >
           {{ initials() }}
         </span>
       }
@@ -62,8 +66,6 @@ type AvatarVariant = 'list' | 'detail';
   `,
 })
 export class PersonAvatar {
-  private readonly translate = inject(TranslateService);
-
   readonly firstName = input.required<string>();
   readonly lastName = input.required<string>();
   readonly avatar = input.required<string>();
@@ -88,9 +90,5 @@ export class PersonAvatar {
     this.failedAvatarUrl.set(this.avatar());
   }
 
-  readonly accessibleLabel = computed(() =>
-    this.translate.instant('common.avatarOf', {
-      name: `${this.firstName().trim()} ${this.lastName().trim()}`.trim(),
-    }),
-  );
+  readonly fullName = computed(() => `${this.firstName().trim()} ${this.lastName().trim()}`.trim());
 }

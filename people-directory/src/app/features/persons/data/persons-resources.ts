@@ -2,13 +2,12 @@ import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { computed, Injectable, signal, Signal } from '@angular/core';
 import { Person } from '../model/person.model';
 import { PersonsListQuery } from '../model/person-query.model';
+import { API_BASE_URL } from '../../../core/api/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonsResources {
-  private readonly baseUrl = 'https://69ca6329ba5984c44bf30fe2.mockapi.io/api/v1';
-
   // ----- Signals internes -----
   private readonly _listQuery = signal<PersonsListQuery>({
     search: '',
@@ -39,7 +38,7 @@ export class PersonsResources {
 
   // ----- Ressources réactives -----
   readonly personsList: HttpResourceRef<Person[] | undefined> = httpResource<Person[]>(() => ({
-    url: `${this.baseUrl}/persons`,
+    url: `${API_BASE_URL}/persons`,
     params: {
       search: this._listQuery().search,
       sortBy: this._listQuery().sortBy,
@@ -50,7 +49,7 @@ export class PersonsResources {
   }));
 
   private readonly _personsCountResource = httpResource<Person[]>(() => ({
-    url: `${this.baseUrl}/persons`,
+    url: `${API_BASE_URL}/persons`,
     params: {
       search: this._listQuery().search,
       page: 1,
@@ -64,7 +63,7 @@ export class PersonsResources {
 
   readonly personDetail: HttpResourceRef<Person | undefined> = httpResource<Person>(() => {
     const id = this._personId();
-    return id ? { url: `${this.baseUrl}/persons/${id}` } : undefined;
+    return id ? { url: `${API_BASE_URL}/persons/${id}` } : undefined;
   });
 
   reloadPersonDetail(): void {
