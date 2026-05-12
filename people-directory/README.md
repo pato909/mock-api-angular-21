@@ -1,59 +1,90 @@
-# PeopleDirectory
+# People Directory
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+Application Angular 21 d'apprentissage autour d'un annuaire de personnes.
 
-## Development server
+Le projet met en pratique un CRUD complet avec Angular Material, une API MockAPI,
+des routes protegees, de l'internationalisation, des formulaires reactifs et une
+architecture separee par responsabilites.
 
-To start a local development server, run:
+## Fonctionnalites
+
+- Liste des personnes avec recherche, tri et pagination.
+- Consultation d'une fiche personne.
+- Creation, modification et suppression avec confirmation.
+- Gestion des etats loading, empty, error et not found.
+- Formulaire reactif avec validation et focus sur le premier champ invalide.
+- Navigation protegee selon le statut connecte et le role administrateur.
+- Profil utilisateur et affichage des permissions disponibles.
+- Interface traduite en francais et en anglais.
+
+## Choix Techniques
+
+- Angular 21 avec composants standalone.
+- Signals et `computed()` pour l'etat local et les permissions derivees.
+- `httpResource()` pour les lectures reactives de la liste et du detail.
+- Services separes pour les appels API, les ressources et la securite.
+- Guards places dans `core/security/guards` pour garder les routes lisibles.
+- URL API centralisee dans `core/api/api.config.ts`.
+- Angular Material pour les composants UI principaux.
+- `@ngx-translate/core` pour l'internationalisation.
+
+## Architecture
+
+Le projet suit une organisation simple:
+
+- `core/`: services transverses, securite, configuration API, langue.
+- `features/`: pages et logique metier par domaine fonctionnel.
+- `shared/`: composants UI reutilisables, validateurs et helpers communs.
+
+Cette separation permet de garder les composants de page orientes parcours
+utilisateur, pendant que les services portent les responsabilites techniques ou
+metier.
+
+## Apprentissages
+
+Ce projet a permis de pratiquer:
+
+- la structuration d'une app Angular moderne;
+- les routes lazy-loadees;
+- les guards et permissions centralisees;
+- les formulaires reactifs types;
+- les validators custom;
+- les signals pour l'etat et les droits UI;
+- la gestion des etats d'ecran;
+- l'internationalisation;
+- la difference entre logique de page, logique API et logique de securite.
+
+## Commandes
+
+Installer les dependances:
 
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Lancer l'application:
 
 ```bash
-ng generate component component-name
+npm run start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Construire l'application:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
-
-To build the project run:
+Lancer les tests unitaires:
 
 ```bash
-ng build
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Notes De Fin
 
-## Running unit tests
+L'application est consideree comme terminee pour l'objectif d'apprentissage.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Deux pistes restent possibles pour aller plus loin plus tard:
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- ajouter une vraie couverture de tests unitaires et composants;
+- analyser le warning de budget du bundle initial signale par `ng build`.
