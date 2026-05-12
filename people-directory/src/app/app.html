@@ -14,7 +14,9 @@
 
       <div class="header-actions">
         <a mat-button routerLink="/persons">{{ 'app.nav.directory' | translate }}</a>
-        <a mat-flat-button routerLink="/persons/new">{{ 'app.nav.newPerson' | translate }}</a>
+        @if (securityService.canCreatePerson()) {
+          <a mat-flat-button routerLink="/persons/new">{{ 'app.nav.newPerson' | translate }}</a>
+        }
         @if (!securityService.isConnected()) {
           <a mat-button (click)="forceLogin()">{{ 'app.nav.login' | translate }}</a>
         } @else {

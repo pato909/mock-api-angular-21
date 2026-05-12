@@ -113,11 +113,13 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
         <span class="page-eyebrow">{{ 'persons.list.eyebrow' | translate }}</span>
         <h1 class="page-title">{{ 'persons.list.title' | translate }}</h1>
 
-        <div class="page-hero__actions">
-          <a mat-flat-button routerLink="/persons/new">{{
-            'persons.list.newPerson' | translate
-          }}</a>
-        </div>
+        @if (securityService.canCreatePerson()) {
+          <div class="page-hero__actions">
+            <a mat-flat-button routerLink="/persons/new">{{
+              'persons.list.newPerson' | translate
+            }}</a>
+          </div>
+        }
       </div>
 
       <section class="page-panel">
@@ -277,7 +279,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
                         [attr.aria-label]="
                           'persons.list.viewPerson' | translate: { name: fullName(person) }
                         "
-                        [disabled]="!securityService.isConnected()"
+                        [disabled]="!securityService.canViewPerson()"
                       >
                         {{ 'common.view' | translate }}
                       </a>
@@ -287,10 +289,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
                         [attr.aria-label]="
                           'persons.list.editPerson' | translate: { name: fullName(person) }
                         "
-                        [disabled]="
-                          !securityService.isConnected() ||
-                          (securityService.isConnected() && !securityService.user().admin)
-                        "
+                        [disabled]="!securityService.canEditPerson()"
                       >
                         {{ 'common.edit' | translate }}
                       </a>
@@ -298,9 +297,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
                         mat-button
                         type="button"
                         [disabled]="
-                          isDeleting(person.id) ||
-                          !securityService.isConnected() ||
-                            (securityService.isConnected() && !securityService.user().admin)
+                          isDeleting(person.id) || !securityService.canDeletePerson()
                         "
                         [attr.aria-label]="
                           'persons.list.deletePerson' | translate: { name: fullName(person) }
@@ -435,7 +432,7 @@ export class PersonsListPage {
   }
 
   protected deletePerson(person: Person) {
-    if (!this.securityService.isConnected() || !this.securityService.user().admin) return;
+    if (!this.securityService.canDeletePerson()) return;
 
     if (this.deletingPersonId()) {
       return;

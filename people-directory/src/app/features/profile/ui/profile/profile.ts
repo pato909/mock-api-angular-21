@@ -304,34 +304,31 @@ export class ProfileComponent {
   protected readonly userConnected = this.securityService.user;
 
   protected readonly permissions = computed(() => {
-    const isConnected = this.securityService.isConnected();
-    const isAdmin = isConnected && this.userConnected().admin;
-
     return [
       {
         labelKey: 'profile.permissionsList.directory.label',
         descriptionKey: 'profile.permissionsList.directory.description',
-        allowed: isConnected,
+        allowed: this.securityService.canViewDirectory(),
       },
       {
         labelKey: 'profile.permissionsList.detail.label',
         descriptionKey: 'profile.permissionsList.detail.description',
-        allowed: isConnected,
+        allowed: this.securityService.canViewPerson(),
       },
       {
         labelKey: 'profile.permissionsList.create.label',
         descriptionKey: 'profile.permissionsList.create.description',
-        allowed: isAdmin,
+        allowed: this.securityService.canCreatePerson(),
       },
       {
         labelKey: 'profile.permissionsList.edit.label',
         descriptionKey: 'profile.permissionsList.edit.description',
-        allowed: isAdmin,
+        allowed: this.securityService.canEditPerson(),
       },
       {
         labelKey: 'profile.permissionsList.delete.label',
         descriptionKey: 'profile.permissionsList.delete.description',
-        allowed: isAdmin,
+        allowed: this.securityService.canDeletePerson(),
       },
     ];
   });

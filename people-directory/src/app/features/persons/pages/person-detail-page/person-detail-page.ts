@@ -82,10 +82,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
               mat-flat-button
               [routerLink]="['/persons', p.id, 'edit']"
               [attr.aria-label]="'persons.list.editPerson' | translate: { name: fullName(p) }"
-              [disabled]="
-                !securityService.isConnected() ||
-                (securityService.isConnected() && !securityService.user().admin)
-              "
+              [disabled]="!securityService.canEditPerson()"
             >
               <mat-icon aria-hidden="true">edit</mat-icon>
               {{ 'common.edit' | translate }}
@@ -96,9 +93,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
               type="button"
               (click)="deletePerson(p)"
               [disabled]="
-                isDeleting() ||
-                !securityService.isConnected() ||
-                (securityService.isConnected() && !securityService.user().admin)
+                isDeleting() || !securityService.canDeletePerson()
               "
               [attr.aria-label]="'persons.list.deletePerson' | translate: { name: fullName(p) }"
             >
@@ -257,7 +252,7 @@ export class PersonDetailPage {
   }
 
   protected deletePerson(person: Person): void {
-    if (!this.securityService.isConnected() || !this.securityService.user().admin) return;
+    if (!this.securityService.canDeletePerson()) return;
 
     if (this.isDeleting()) {
       return;

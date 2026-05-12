@@ -28,6 +28,14 @@ export class SecurityService {
   readonly isConnected: Signal<boolean> = computed(
     () => this.user().connected && this.oauthService.hasValidAccessToken(),
   );
+  readonly isAdmin: Signal<boolean> = computed(() => this.isConnected() && this.user().admin);
+  readonly canAccessProtectedRoute: Signal<boolean> = computed(() => this.isConnected());
+  readonly canViewDirectory: Signal<boolean> = computed(() => true);
+  readonly canViewPerson: Signal<boolean> = computed(() => this.isConnected());
+  readonly canCreatePerson: Signal<boolean> = computed(() => this.isAdmin());
+  readonly canEditPerson: Signal<boolean> = computed(() => this.isAdmin());
+  readonly canDeletePerson: Signal<boolean> = computed(() => this.isAdmin());
+  readonly canViewProfile: Signal<boolean> = computed(() => this.isConnected());
 
   private readonly authConfig = new AuthConfig({
     issuer: 'https://oauth-v5-mock-proxy.int.socialsecurity.be', // => https://oauth-v5-mock.int.socialsecurity.be/.well-known/openid-configuration

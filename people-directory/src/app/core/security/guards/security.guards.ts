@@ -6,7 +6,7 @@ export const adminGuard: CanActivateFn = () => {
   const securityService = inject(SecurityService);
   const router = inject(Router);
 
-  if (securityService.isConnected() && securityService.user().admin) {
+  if (securityService.canCreatePerson()) {
     return true;
   }
 
@@ -17,7 +17,7 @@ export const connectedGuard: CanActivateFn = () => {
   const securityService = inject(SecurityService);
   const router = inject(Router);
 
-  if (securityService.isConnected()) {
+  if (securityService.canAccessProtectedRoute()) {
     return true;
   }
 
