@@ -1,50 +1,9 @@
-<div class="shell-backdrop">
-  <a class="skip-link" href="#main-content">{{ 'app.skipToMain' | translate }}</a>
-
-  <main class="app-shell page-shell">
-    <mat-toolbar class="app-header">
-      <div class="brand">
-        <div class="brand-mark">PD</div>
-
-        <div class="brand-copy">
-          <span class="app-name">{{ 'app.title' | translate }}</span>
-          <span class="app-tagline">{{ 'app.tagline' | translate }}</span>
-        </div>
-      </div>
-
-      <div class="header-actions">
-        <a mat-button routerLink="/persons">{{ 'app.nav.directory' | translate }}</a>
-        @if (securityService.canCreatePerson()) {
-          <a mat-flat-button routerLink="/persons/new">{{ 'app.nav.newPerson' | translate }}</a>
-        }
-        @if (!securityService.isConnected()) {
-          <a mat-button (click)="forceLogin()">{{ 'app.nav.login' | translate }}</a>
-        } @else {
-          <!-- Menu déroulant -->
-          <button mat-button [matMenuTriggerFor]="userMenu">
-            <mat-icon>account_circle</mat-icon>
-            {{ securityService.user().firstname }} {{ securityService.user().lastname }}
-            <mat-icon>arrow_drop_down</mat-icon>
-          </button>
-
-          <mat-menu #userMenu="matMenu">
-            <button mat-menu-item routerLink="/profile">
-              <mat-icon>person</mat-icon>
-              <span>{{ 'app.nav.profile' | translate }}</span>
-            </button>
-            <mat-divider />
-            <button mat-menu-item (click)="securityService.logout()">
-              <mat-icon>logout</mat-icon>
-              <span>{{ 'app.nav.logout' | translate }}</span>
-            </button>
-          </mat-menu>
-        }
-        <app-language-switcher />
-      </div>
-    </mat-toolbar>
-
-    <section id="main-content" class="app-content" tabindex="-1">
+<div>
+  <main>
+    <app-header></app-header>
+    <section id="main-content" class="bg-gray-50"  tabindex="-1">
       <router-outlet />
     </section>
+    <app-footer></app-footer>
   </main>
 </div>

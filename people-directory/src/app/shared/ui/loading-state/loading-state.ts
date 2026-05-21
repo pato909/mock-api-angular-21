@@ -7,51 +7,21 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-loading-state',
   imports: [MatCardModule, MatProgressSpinnerModule, TranslatePipe],
   template: `
-    <mat-card class="state-card">
-      <mat-card-content class="state-layout">
-        <mat-progress-spinner
-          mode="indeterminate"
-          diameter="40"
-          strokeWidth="4"
-          [attr.aria-label]="'common.loadingContent' | translate"
-        />
+    <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm flex items-center gap-4">
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="40"
+        strokeWidth="4"
+        [attr.aria-label]="'common.loadingContent' | translate"
+      />
 
-        <div class="state-copy">
-          <h3>{{ title() | translate }}</h3>
-          <p>{{ message() | translate }}</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <div class="flex flex-col gap-1">
+        <h3 class="text-base font-medium text-gray-700">{{ title() | translate }}</h3>
+        <p class="text-sm text-gray-400">{{ message() | translate }}</p>
+      </div>
+    </div>
   `,
-  styles: `
-    .state-card {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--app-border);
-      background: var(--app-surface);
-      box-shadow: none;
-    }
-
-    .state-layout {
-      display: flex;
-      align-items: center;
-      gap: var(--space-5);
-      padding: var(--space-6);
-    }
-
-    .state-copy {
-      display: grid;
-      gap: var(--space-2);
-    }
-
-    h3 {
-      font: var(--mat-sys-title-large);
-      color: var(--app-text);
-    }
-
-    p {
-      color: var(--app-text-muted);
-    }
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingStateComponent {

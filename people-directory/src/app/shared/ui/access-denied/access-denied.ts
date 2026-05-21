@@ -8,22 +8,26 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-access-denied',
   imports: [MatButton, MatIcon, RouterLink, TranslatePipe],
   template: `
-    <section class="page-section">
-      <div class="page-hero access-hero">
-        <div class="status-icon" aria-hidden="true">
-          <mat-icon>lock</mat-icon>
+    <section class="flex justify-center items-center p-12">
+      <div class="flex flex-col items-center gap-6 text-center max-w-md">
+        <div aria-hidden="true" class="text-gray-400">
+          <mat-icon class="text-5xl">lock</mat-icon>
         </div>
 
-        <div class="status-copy">
-          <span class="page-eyebrow">{{ 'accessDenied.eyebrow' | translate }}</span>
-          <h1 class="page-title">{{ 'accessDenied.title' | translate }}</h1>
-          <p class="page-subtitle">
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-medium text-gray-400 uppercase tracking-wide">
+            {{ 'accessDenied.eyebrow' | translate }}
+          </span>
+          <h1 class="text-2xl font-bold text-gray-800">
+            {{ 'accessDenied.title' | translate }}
+          </h1>
+          <p class="text-gray-500">
             {{ 'accessDenied.message' | translate }}
           </p>
         </div>
 
         <div
-          class="status-actions"
+          class="flex gap-3"
           role="group"
           [attr.aria-label]="'accessDenied.navigationLabel' | translate"
         >
@@ -40,60 +44,7 @@ import { TranslatePipe } from '@ngx-translate/core';
       </div>
     </section>
   `,
-  styles: `
-    .access-hero {
-      align-items: start;
-      background: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--mat-sys-error-container) 64%, white),
-        color-mix(in srgb, var(--mat-sys-surface) 88%, white)
-      );
-    }
-
-    .status-icon {
-      display: grid;
-      place-items: center;
-      width: 4rem;
-      height: 4rem;
-      border: 1px solid color-mix(in srgb, var(--mat-sys-error) 20%, white);
-      border-radius: 1.25rem;
-      background: color-mix(in srgb, var(--mat-sys-error-container) 72%, white);
-      color: var(--mat-sys-error);
-    }
-
-    .status-icon mat-icon {
-      width: 2rem;
-      height: 2rem;
-      font-size: 2rem;
-    }
-
-    .status-copy {
-      display: grid;
-      gap: var(--space-3);
-    }
-
-    .status-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .status-actions a {
-      display: inline-flex;
-      gap: var(--space-2);
-    }
-
-    @media (max-width: 640px) {
-      .status-actions {
-        width: 100%;
-      }
-
-      .status-actions a {
-        flex: 1 1 12rem;
-        justify-content: center;
-      }
-    }
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccessDeniedComponent {}

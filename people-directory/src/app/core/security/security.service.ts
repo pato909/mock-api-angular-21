@@ -37,6 +37,7 @@ export class SecurityService {
   readonly canDeletePerson: Signal<boolean> = computed(() => this.isAdmin());
   readonly canViewProfile: Signal<boolean> = computed(() => this.isConnected());
 
+
   private readonly authConfig = new AuthConfig({
     issuer: 'https://oauth-v5-mock-proxy.int.socialsecurity.be', // => https://oauth-v5-mock.int.socialsecurity.be/.well-known/openid-configuration
     strictDiscoveryDocumentValidation: false, //all endpoint in wellknown are not in same domain

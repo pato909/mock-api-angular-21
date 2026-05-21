@@ -48,284 +48,196 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     PersonAvatar,
     TranslatePipe,
   ],
-  styles: `
-    .page-search-field {
-      max-width: 36rem;
-      width: 100%;
-    }
-
-    .persons-table-wrapper {
-      overflow: hidden;
-      border: 1px solid var(--app-border);
-      border-radius: var(--radius-md);
-      background: var(--app-surface);
-    }
-
-    .persons-table {
-      width: 100%;
-      background: transparent;
-    }
-
-    .persons-table .mat-mdc-header-row {
-      background: color-mix(in srgb, var(--mat-sys-secondary-container) 38%, white);
-    }
-
-    .persons-table .mat-mdc-header-cell {
-      color: var(--app-text);
-      font: var(--mat-sys-title-small);
-      border-bottom: 1px solid var(--app-border);
-      padding-block: var(--space-4);
-    }
-
-    .persons-table .mat-mdc-cell {
-      color: var(--app-text);
-      border-bottom: 1px solid color-mix(in srgb, var(--app-border) 70%, transparent);
-      padding-block: var(--space-4);
-    }
-
-    .persons-table .mat-mdc-row:hover {
-      background: color-mix(in srgb, var(--mat-sys-secondary-container) 18%, white);
-    }
-
-    .persons-table .mat-mdc-row:last-child .mat-mdc-cell {
-      border-bottom: none;
-    }
-
-    .person-name {
-      display: grid;
-      gap: 0.2rem;
-      font-weight: 600;
-    }
-
-    .person-secondary {
-      color: var(--app-text-muted);
-    }
-
-    .person-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-  `,
+  styles: ``,
   template: `
-    <section class="page-section">
-      <div class="page-hero">
-        <span class="page-eyebrow">{{ 'persons.list.eyebrow' | translate }}</span>
-        <h1 class="page-title">{{ 'persons.list.title' | translate }}</h1>
+    <section class="flex flex-col gap-6 p-6">
+      <!-- Search -->
+      <section class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+        <h2 class="text-base font-medium text-gray-700 mb-4">
+          {{ 'persons.list.searchTitle' | translate }}
+        </h2>
 
-        @if (securityService.canCreatePerson()) {
-          <div class="page-hero__actions">
-            <a mat-flat-button routerLink="/persons/new">{{
-              'persons.list.newPerson' | translate
-            }}</a>
-          </div>
-        }
-      </div>
-
-      <section class="page-panel">
-        <div class="section-header">
-          <div class="page-section">
-            <h2 class="section-title">{{ 'persons.list.searchTitle' | translate }}</h2>
-          </div>
-        </div>
-
-        <div class="page-panel__content">
-          <mat-form-field appearance="outline" class="page-search-field">
-            <mat-label>{{ 'persons.list.searchLabel' | translate }}</mat-label>
-            <input
-              #searchInput
-              matInput
-              type="text"
-              [placeholder]="'persons.list.searchPlaceholder' | translate"
-              aria-describedby="persons-search-hint"
-              [value]="this.searchInput()"
-              (input)="updateSearch(searchInput.value)"
-            />
-            <mat-hint id="persons-search-hint">{{
-              'persons.list.searchHint' | translate
-            }}</mat-hint>
-            @if (this.searchInput()) {
-              <button
-                mat-icon-button
-                matSuffix
-                type="button"
-                [attr.aria-label]="'persons.list.clearSearch' | translate"
-                (click)="clearSearch()"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-          </mat-form-field>
-        </div>
+        <mat-form-field appearance="outline" class="w-96">
+          <mat-label>{{ 'persons.list.searchLabel' | translate }}</mat-label>
+          <input
+            #searchInput
+            matInput
+            type="text"
+            [placeholder]="'persons.list.searchPlaceholder' | translate"
+            aria-describedby="persons-search-hint"
+            [value]="this.searchInput()"
+            (input)="updateSearch(searchInput.value)"
+          />
+          <mat-hint id="persons-search-hint">{{ 'persons.list.searchHint' | translate }}</mat-hint>
+          @if (this.searchInput()) {
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              [attr.aria-label]="'persons.list.clearSearch' | translate"
+              (click)="clearSearch()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
       </section>
 
-      <section class="page-panel">
-        <div class="section-header">
-          <div class="page-section">
-            <h2 class="section-title">{{ 'persons.list.resultsTitle' | translate }}</h2>
+      <!-- Results -->
+      <section class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+        <h2 class="text-base font-medium text-gray-700 mb-4">
+          {{ 'persons.list.resultsTitle' | translate }}
+        </h2>
+
+        @if (persons.isLoading()) {
+          <app-loading-state
+            title="persons.list.loadingTitle"
+            message="persons.list.loadingMessage"
+          />
+        } @else if (persons.error()) {
+          <app-error-state
+            kicker="common.error"
+            title="persons.list.loadErrorTitle"
+            message="persons.list.loadErrorMessage"
+            actionLabel="common.retry"
+            (retry)="retryPersonsList()"
+          />
+        } @else if (rows().length === 0) {
+          <app-empty-state
+            kicker="persons.list.emptyKicker"
+            [title]="
+              query().search.trim()
+                ? 'persons.list.emptySearchTitle'
+                : 'persons.list.emptyDirectoryTitle'
+            "
+            [message]="
+              query().search.trim()
+                ? 'persons.list.emptySearchMessage'
+                : 'persons.list.emptyDirectoryMessage'
+            "
+            [actionLabel]="
+              query().search.trim() ? 'persons.list.clearSearch' : 'persons.list.createFirstPerson'
+            "
+            (action)="query().search.trim() ? clearSearch() : goToCreate()"
+          />
+        } @else {
+          <div class="overflow-x-auto">
+            <table
+              mat-table
+              [dataSource]="rows()"
+              [attr.aria-label]="'persons.list.tableLabel' | translate"
+              matSort
+              [matSortActive]="sortActive()"
+              [matSortDirection]="query().order"
+              (matSortChange)="updateSort($event.active, $event.direction)"
+            >
+              <caption class="sr-only">
+                {{
+                  'persons.list.tableCaption' | translate
+                }}
+              </caption>
+
+              <ng-container matColumnDef="avatar">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.avatar' | translate }}</th>
+                <td mat-cell *matCellDef="let person">
+                  <app-person-avatar
+                    [avatar]="person.avatar"
+                    [firstName]="person.firstName"
+                    [lastName]="person.lastName"
+                  />
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="name">
+                  {{ 'persons.fields.fullName' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let person">
+                  <div class="flex flex-col">
+                    <span>{{ person.firstName }} {{ person.lastName }}</span>
+                    <span class="text-xs text-gray-400">
+                      {{ 'persons.list.personIdentifier' | translate: { id: person.id } }}
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
+                  {{ 'common.email' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let person">{{ person.email }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">
+                  {{ 'common.phone' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let person">{{ person.phone }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="birthDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="birthDate">
+                  {{ 'persons.fields.birthDate' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let person">
+                  {{ person.birthDate | date: 'dd/MM/yyyy' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.actions' | translate }}</th>
+                <td mat-cell *matCellDef="let person">
+                  <div class="flex gap-1">
+                    <a
+                      mat-button
+                      [routerLink]="['/persons', person.id]"
+                      [attr.aria-label]="
+                        'persons.list.viewPerson' | translate: { name: fullName(person) }
+                      "
+                      [disabled]="!securityService.canViewPerson()"
+                      >{{ 'common.view' | translate }}</a
+                    >
+                    <a
+                      mat-button
+                      [routerLink]="['/persons', person.id, 'edit']"
+                      [attr.aria-label]="
+                        'persons.list.editPerson' | translate: { name: fullName(person) }
+                      "
+                      [disabled]="!securityService.canEditPerson()"
+                      >{{ 'common.edit' | translate }}</a
+                    >
+                    <button
+                      mat-button
+                      type="button"
+                      [disabled]="isDeleting(person.id) || !securityService.canDeletePerson()"
+                      [attr.aria-label]="
+                        'persons.list.deletePerson' | translate: { name: fullName(person) }
+                      "
+                      (click)="deletePerson(person)"
+                    >
+                      {{
+                        (isDeleting(person.id) ? 'common.deleting' : 'common.delete') | translate
+                      }}
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <mat-paginator
+              [pageIndex]="query().page - 1"
+              [pageSize]="query().limit"
+              [pageSizeOptions]="[5, 10, 25, 50]"
+              [length]="countResource()"
+              [attr.aria-label]="'persons.list.paginationLabel' | translate"
+              (page)="updatePage($event.pageIndex, $event.pageSize)"
+            />
           </div>
-        </div>
-
-        <div class="page-panel__content">
-          @if (persons.isLoading()) {
-            <app-loading-state
-              title="persons.list.loadingTitle"
-              message="persons.list.loadingMessage"
-            />
-          } @else if (persons.error()) {
-            <app-error-state
-              kicker="common.error"
-              title="persons.list.loadErrorTitle"
-              message="persons.list.loadErrorMessage"
-              actionLabel="common.retry"
-              (retry)="retryPersonsList()"
-            />
-          } @else if (rows().length === 0) {
-            <app-empty-state
-              kicker="persons.list.emptyKicker"
-              [title]="
-                query().search.trim()
-                  ? 'persons.list.emptySearchTitle'
-                  : 'persons.list.emptyDirectoryTitle'
-              "
-              [message]="
-                query().search.trim()
-                  ? 'persons.list.emptySearchMessage'
-                  : 'persons.list.emptyDirectoryMessage'
-              "
-              [actionLabel]="
-                query().search.trim()
-                  ? 'persons.list.clearSearch'
-                  : 'persons.list.createFirstPerson'
-              "
-              (action)="query().search.trim() ? clearSearch() : goToCreate()"
-            />
-          } @else {
-            <div class="persons-table-wrapper">
-              <table
-                mat-table
-                [dataSource]="rows()"
-                class="persons-table"
-                [attr.aria-label]="'persons.list.tableLabel' | translate"
-                matSort
-                [matSortActive]="sortActive()"
-                [matSortDirection]="query().order"
-                (matSortChange)="updateSort($event.active, $event.direction)"
-              >
-                <caption class="sr-only">
-                  {{
-                    'persons.list.tableCaption' | translate
-                  }}
-                </caption>
-                <ng-container matColumnDef="avatar">
-                  <th mat-header-cell *matHeaderCellDef>{{ 'common.avatar' | translate }}</th>
-                  <td mat-cell *matCellDef="let person">
-                    <app-person-avatar
-                      [avatar]="person.avatar"
-                      [firstName]="person.firstName"
-                      [lastName]="person.lastName"
-                    />
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="name">
-                    {{ 'persons.fields.fullName' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let person">
-                    <div class="person-name">
-                      <span>{{ person.firstName }} {{ person.lastName }}</span>
-                      <span class="person-secondary">{{
-                        'persons.list.personIdentifier' | translate: { id: person.id }
-                      }}</span>
-                    </div>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="email">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
-                    {{ 'common.email' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let person">
-                    {{ person.email }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="phone">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">
-                    {{ 'common.phone' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let person">
-                    {{ person.phone }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="birthDate">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header="birthDate">
-                    {{ 'persons.fields.birthDate' | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let person">
-                    {{ person.birthDate | date: 'dd/MM/yyyy' }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>{{ 'common.actions' | translate }}</th>
-                  <td mat-cell *matCellDef="let person">
-                    <div class="person-actions">
-                      <a
-                        mat-button
-                        [routerLink]="['/persons', person.id]"
-                        [attr.aria-label]="
-                          'persons.list.viewPerson' | translate: { name: fullName(person) }
-                        "
-                        [disabled]="!securityService.canViewPerson()"
-                      >
-                        {{ 'common.view' | translate }}
-                      </a>
-                      <a
-                        mat-button
-                        [routerLink]="['/persons', person.id, 'edit']"
-                        [attr.aria-label]="
-                          'persons.list.editPerson' | translate: { name: fullName(person) }
-                        "
-                        [disabled]="!securityService.canEditPerson()"
-                      >
-                        {{ 'common.edit' | translate }}
-                      </a>
-                      <button
-                        mat-button
-                        type="button"
-                        [disabled]="
-                          isDeleting(person.id) || !securityService.canDeletePerson()
-                        "
-                        [attr.aria-label]="
-                          'persons.list.deletePerson' | translate: { name: fullName(person) }
-                        "
-                        (click)="deletePerson(person)"
-                      >
-                        {{
-                          (isDeleting(person.id) ? 'common.deleting' : 'common.delete') | translate
-                        }}
-                      </button>
-                    </div>
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-              </table>
-              <mat-paginator
-                [pageIndex]="query().page - 1"
-                [pageSize]="query().limit"
-                [pageSizeOptions]="[5, 10, 25, 50]"
-                [length]="countResource()"
-                [attr.aria-label]="'persons.list.paginationLabel' | translate"
-                (page)="updatePage($event.pageIndex, $event.pageSize)"
-              />
-            </div>
-          }
-        </div>
+        }
       </section>
     </section>
   `,

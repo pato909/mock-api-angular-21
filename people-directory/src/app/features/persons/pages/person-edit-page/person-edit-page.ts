@@ -23,26 +23,35 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     TranslatePipe,
   ],
   template: `
-    <section class="page-section">
-      <div class="page-hero">
-        <span class="page-eyebrow">{{ 'persons.edit.eyebrow' | translate }}</span>
-        <h1 class="page-title">{{ 'persons.edit.title' | translate }}</h1>
-
-        <div class="page-hero__actions">
-          <a mat-stroked-button routerLink="/persons">{{ 'common.backToDirectory' | translate }}</a>
+    <div class="px-6 py-10 flex flex-col gap-8">
+      <!-- Hero -->
+      <div class="flex flex-col gap-3">
+        <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">{{
+          'persons.edit.eyebrow' | translate
+        }}</span>
+        <h1 class="text-2xl font-bold text-gray-900">{{ 'persons.edit.title' | translate }}</h1>
+        <div class="mt-2">
+          <a
+            routerLink="/persons"
+            class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors"
+          >
+            {{ 'common.backToDirectory' | translate }}
+          </a>
         </div>
       </div>
 
-      <section class="page-panel" aria-labelledby="edit-person-title">
-        <div class="section-header">
-          <div class="page-section">
-            <span class="page-eyebrow">{{ 'persons.create.formEyebrow' | translate }}</span>
-            <h2 id="edit-person-title" class="section-title">
-              {{ 'persons.create.formTitle' | translate }}
-            </h2>
-          </div>
+      <!-- Form panel -->
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">{{
+            'persons.create.formEyebrow' | translate
+          }}</span>
+          <h2 id="edit-person-title" class="text-base font-semibold text-gray-900 mt-1">
+            {{ 'persons.create.formTitle' | translate }}
+          </h2>
         </div>
-        <div class="page-panel__content">
+
+        <div class="px-6 py-6">
           @if (person.isLoading()) {
             <app-loading-state
               title="persons.detail.loadingTitle"
@@ -72,8 +81,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
             />
           }
         </div>
-      </section>
-    </section>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

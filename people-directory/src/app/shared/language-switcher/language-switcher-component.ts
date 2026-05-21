@@ -7,23 +7,29 @@ import { TranslatePipe } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
   template: `
-    <div class="language-switcher" [attr.aria-label]="'language.selection' | translate">
+    <div class="flex items-center gap-1" [attr.aria-label]="'language.selection' | translate">
       <button
         type="button"
-        class="language-switcher__link"
-        [class.language-switcher__link--active]="activeLanguage() === 'fr'"
+        class="cursor-pointer px-2 py-1 text-sm font-medium rounded transition-colors"
+        [class.text-gray-800]="activeLanguage() === 'fr'"
+        [class.font-semibold]="activeLanguage() === 'fr'"
+        [class.text-gray-400]="activeLanguage() !== 'fr'"
+        [class.hover:text-gray-600]="activeLanguage() !== 'fr'"
         [disabled]="activeLanguage() === 'fr'"
         (click)="useLanguage('fr')"
       >
         FR
       </button>
 
-      <span class="language-switcher__separator" aria-hidden="true">·</span>
+      <span class="text-gray-300" aria-hidden="true">·</span>
 
       <button
         type="button"
-        class="language-switcher__link"
-        [class.language-switcher__link--active]="activeLanguage() === 'en'"
+        class="cursor-pointer px-2 py-1 text-sm font-medium rounded transition-colors"
+        [class.text-gray-800]="activeLanguage() === 'en'"
+        [class.font-semibold]="activeLanguage() === 'en'"
+        [class.text-gray-400]="activeLanguage() !== 'en'"
+        [class.hover:text-gray-600]="activeLanguage() !== 'en'"
         [disabled]="activeLanguage() === 'en'"
         (click)="useLanguage('en')"
       >
@@ -31,52 +37,7 @@ import { TranslatePipe } from '@ngx-translate/core';
       </button>
     </div>
   `,
-  styles: `
-    .language-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.875rem;
-      line-height: 1;
-    }
-
-    .language-switcher__link {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: var(--mat-sys-primary);
-      cursor: pointer;
-      font: inherit;
-      font-weight: 500;
-      letter-spacing: 0;
-      text-decoration: none;
-    }
-
-    .language-switcher__link:hover:not(:disabled) {
-      color: color-mix(in srgb, var(--mat-sys-primary) 82%, black);
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
-
-    .language-switcher__link:focus-visible {
-      outline: 2px solid var(--mat-sys-primary);
-      outline-offset: 3px;
-      border-radius: 0.125rem;
-    }
-
-    .language-switcher__link--active,
-    .language-switcher__link:disabled {
-      color: var(--app-text);
-      cursor: default;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .language-switcher__separator {
-      color: var(--app-text-muted);
-      font-size: 0.8rem;
-    }
-  `,
+  styles: ``,
 })
 export class LanguageSwitcherComponent {
   private readonly languageService = inject(LanguageService);

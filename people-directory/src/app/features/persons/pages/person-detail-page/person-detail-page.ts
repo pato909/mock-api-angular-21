@@ -22,8 +22,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   selector: 'app-person-detail-page',
   imports: [
     MatIcon,
-    MatDivider,
-    MatButton,
     RouterLink,
     LoadingStateComponent,
     ErrorStateComponent,
@@ -55,164 +53,141 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
         (retry)="retryPersonDetail()"
       />
     }
+
     @if (person.value(); as p) {
-      <section class="page-section">
-        <div class="page-hero detail-hero">
-          <div class="detail-hero__identity">
+      <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col gap-8">
+        <!-- Hero -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div class="flex items-center gap-4">
             <app-person-avatar
               [avatar]="p.avatar"
               [firstName]="p.firstName"
               [lastName]="p.lastName"
               variant="detail"
             />
-
-            <div class="detail-hero__copy">
-              <span class="page-eyebrow">{{ 'persons.detail.personCard' | translate }}</span>
-              <h1 class="page-title">{{ p.firstName }} {{ p.lastName }}</h1>
-              <p class="page-subtitle">{{ p.email }}</p>
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">{{
+                'persons.detail.personCard' | translate
+              }}</span>
+              <h1 class="text-2xl font-bold text-gray-900">{{ p.firstName }} {{ p.lastName }}</h1>
+              <p class="text-sm text-gray-500">{{ p.email }}</p>
             </div>
           </div>
 
           <div
-            class="detail-actions"
+            class="flex gap-3"
             role="group"
             [attr.aria-label]="'persons.detail.actionsLabel' | translate"
           >
             <a
-              mat-flat-button
               [routerLink]="['/persons', p.id, 'edit']"
               [attr.aria-label]="'persons.list.editPerson' | translate: { name: fullName(p) }"
-              [disabled]="!securityService.canEditPerson()"
+              [class.pointer-events-none]="!securityService.canEditPerson()"
+              [class.opacity-50]="!securityService.canEditPerson()"
+              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors"
             >
-              <mat-icon aria-hidden="true">edit</mat-icon>
+              <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
               {{ 'common.edit' | translate }}
             </a>
 
             <button
-              mat-flat-button
               type="button"
               (click)="deletePerson(p)"
-              [disabled]="
-                isDeleting() || !securityService.canDeletePerson()
-              "
+              [disabled]="isDeleting() || !securityService.canDeletePerson()"
               [attr.aria-label]="'persons.list.deletePerson' | translate: { name: fullName(p) }"
+              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors"
             >
-              <mat-icon aria-hidden="true">delete</mat-icon>
+              <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
               {{ (isDeleting() ? 'common.deleting' : 'common.delete') | translate }}
             </button>
           </div>
         </div>
 
-        <section class="page-panel">
-          <div class="section-header">
-            <div class="page-section">
-              <span class="page-eyebrow">{{ 'persons.detail.coordinates' | translate }}</span>
-              <h2 class="section-title">{{ 'persons.detail.mainInformation' | translate }}</h2>
+        <!-- Contact info -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">{{
+              'persons.detail.coordinates' | translate
+            }}</span>
+            <h2 class="text-base font-semibold text-gray-900 mt-1">
+              {{ 'persons.detail.mainInformation' | translate }}
+            </h2>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100"
+          >
+            <div class="px-6 py-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wide">{{
+                'common.email' | translate
+              }}</span>
+              <a
+                [href]="'mailto:' + p.email"
+                class="block text-sm font-medium text-blue-600 hover:underline mt-1"
+                >{{ p.email }}</a
+              >
+            </div>
+            <div class="px-6 py-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wide">{{
+                'common.phone' | translate
+              }}</span>
+              <a
+                [href]="'tel:' + p.phone"
+                class="block text-sm font-medium text-blue-600 hover:underline mt-1"
+                >{{ p.phone }}</a
+              >
+            </div>
+            <div class="px-6 py-4">
+              <span class="text-xs text-gray-400 uppercase tracking-wide">{{
+                'persons.fields.birthDate' | translate
+              }}</span>
+              <span class="block text-sm font-medium text-gray-900 mt-1">{{
+                p.birthDate | date: 'dd/MM/yyyy'
+              }}</span>
             </div>
           </div>
+        </div>
 
-          <div class="page-info-grid">
-            <div class="page-info-card">
-              <span class="page-info-label">{{ 'common.email' | translate }}</span>
-              <a class="page-info-value" [href]="'mailto:' + p.email">
-                {{ p.email }}
-              </a>
-            </div>
-
-            <div class="page-info-card">
-              <span class="page-info-label">{{ 'common.phone' | translate }}</span>
-              <a class="page-info-value" [href]="'tel:' + p.phone">
-                {{ p.phone }}
-              </a>
-            </div>
-
-            <div class="page-info-card">
-              <span class="page-info-label">{{ 'persons.fields.birthDate' | translate }}</span>
-              <span class="page-info-value">{{ p.birthDate | date: 'dd/MM/yyyy' }}</span>
-            </div>
+        <!-- Metadata -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">{{
+              'persons.detail.metadata' | translate
+            }}</span>
+            <h2 class="text-base font-semibold text-gray-900 mt-1">
+              {{ 'persons.detail.tracking' | translate }}
+            </h2>
           </div>
-        </section>
-
-        <section class="page-panel page-panel--quiet" aria-labelledby="metadata-title">
-          <div class="section-header">
-            <div class="page-section">
-              <span class="page-eyebrow">{{ 'persons.detail.metadata' | translate }}</span>
-              <h2 id="metadata-title" class="section-title">
-                {{ 'persons.detail.tracking' | translate }}
-              </h2>
+          <dl
+            class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100"
+          >
+            <div class="px-6 py-4">
+              <dt class="text-xs text-gray-400 uppercase tracking-wide">
+                {{ 'common.identifier' | translate }}
+              </dt>
+              <dd class="text-sm font-medium text-gray-900 mt-1">{{ p.id }}</dd>
             </div>
-          </div>
-
-          <mat-divider />
-
-          <dl class="page-info-grid metadata-list">
-            <div class="page-info-card">
-              <dt class="page-info-label">{{ 'common.identifier' | translate }}</dt>
-              <dd class="page-info-value">{{ p.id }}</dd>
+            <div class="px-6 py-4">
+              <dt class="text-xs text-gray-400 uppercase tracking-wide">
+                {{ 'persons.detail.createdAt' | translate }}
+              </dt>
+              <dd class="text-sm font-medium text-gray-900 mt-1">
+                {{ p.created_at | date: 'dd/MM/yyyy' }}
+              </dd>
             </div>
-
-            <div class="page-info-card">
-              <dt class="page-info-label">{{ 'persons.detail.createdAt' | translate }}</dt>
-              <dd class="page-info-value">{{ p.created_at | date: 'dd/MM/yyyy' }}</dd>
-            </div>
-
-            <div class="page-info-card">
-              <dt class="page-info-label">{{ 'persons.detail.updatedAt' | translate }}</dt>
-              <dd class="page-info-value">{{ p.updated_at | date: 'dd/MM/yyyy' }}</dd>
+            <div class="px-6 py-4">
+              <dt class="text-xs text-gray-400 uppercase tracking-wide">
+                {{ 'persons.detail.updatedAt' | translate }}
+              </dt>
+              <dd class="text-sm font-medium text-gray-900 mt-1">
+                {{ p.updated_at | date: 'dd/MM/yyyy' }}
+              </dd>
             </div>
           </dl>
-        </section>
-      </section>
+        </div>
+      </div>
     }
   `,
-  styles: `
-    .detail-hero {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-6);
-      background: color-mix(in srgb, var(--mat-sys-surface-container-low) 55%, aliceblue);
-    }
-
-    .detail-hero__identity {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--space-5);
-      min-width: 0;
-    }
-
-    .detail-hero__copy {
-      display: grid;
-      gap: var(--space-2);
-      min-width: 0;
-    }
-
-    .detail-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .detail-actions a,
-    .detail-actions button {
-      display: inline-flex;
-      gap: var(--space-2);
-    }
-
-    @media (max-width: 640px) {
-      .detail-actions {
-        width: 100%;
-      }
-
-      .detail-actions a,
-      .detail-actions button {
-        flex: 1 1 12rem;
-        justify-content: center;
-      }
-    }
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonDetailPage {
