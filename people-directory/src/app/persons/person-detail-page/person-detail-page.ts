@@ -87,13 +87,12 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
               <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
               {{ 'common.edit' | translate }}
             </button>
-
             <button
               type="button"
               (click)="deletePerson(p)"
-              [disabled]="isDeleting() || !securityService.canDeletePerson()"
+              [disabled]="!isDeleting() && !securityService.canDeletePerson()"
               [attr.aria-label]="'persons.list.deletePerson' | translate: { name: fullName(p) }"
-              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors"
+              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
               {{ (isDeleting() ? 'common.deleting' : 'common.delete') | translate }}

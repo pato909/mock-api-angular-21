@@ -3,7 +3,7 @@ import { connectedGuard } from '../core/security/guards/security.guards';
 
 export const PROFILE_ROUTES: Routes = [
   {
-    path: 'profile',
+    path: '',
     canActivate: [connectedGuard],
     loadComponent: () => import('./profile').then((m) => m.ProfileComponent),
   },

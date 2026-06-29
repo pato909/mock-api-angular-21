@@ -9,6 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-profile',
   imports: [MatIcon, RouterLink, UpperCasePipe, TranslatePipe],
   template: `
+
     @if (userConnected(); as user) {
       <div class="px-6 py-10 flex flex-col gap-8">
         <!-- Hero -->
