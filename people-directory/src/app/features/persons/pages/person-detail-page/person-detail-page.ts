@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, inject, input, signal } fro
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
-import { PersonsResources } from '../../data/persons-resources';
+import { Router } from '@angular/router';
 import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
 import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
 import { DatePipe } from '@angular/common';
@@ -22,7 +21,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   selector: 'app-person-detail-page',
   imports: [
     MatIcon,
-    RouterLink,
     LoadingStateComponent,
     ErrorStateComponent,
     DatePipe,
@@ -55,7 +53,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     }
 
     @if (person.value(); as p) {
-      <div class="max-w-3xl mx-auto px-6 py-10 flex flex-col gap-8">
+      <div class="px-6 py-10 flex flex-col gap-8">
         <!-- Hero -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div class="flex items-center gap-4">
@@ -79,16 +77,16 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
             role="group"
             [attr.aria-label]="'persons.detail.actionsLabel' | translate"
           >
-            <a
-              [routerLink]="['/persons', p.id, 'edit']"
+            <button
+              type="button"
               [attr.aria-label]="'persons.list.editPerson' | translate: { name: fullName(p) }"
-              [class.pointer-events-none]="!securityService.canEditPerson()"
-              [class.opacity-50]="!securityService.canEditPerson()"
-              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors"
+              [disabled]="!securityService.canEditPerson()"
+              (click)="goToEdit(p.id)"
+              class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded border border-gray-300 text-sm font-medium hover:bg-gray-200 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
               {{ 'common.edit' | translate }}
-            </a>
+            </button>
 
             <button
               type="button"
@@ -195,12 +193,11 @@ export class PersonDetailPage {
   readonly id = input.required<string>();
   readonly isDeleting = signal(false);
 
-  private readonly personsResources = inject(PersonsResources);
   private readonly personApi = inject(PersonsApiService);
   private readonly router = inject(Router);
   readonly securityService = inject(SecurityService);
 
-  protected readonly person = this.personsResources.personDetail;
+  protected readonly person = this.personApi.personDetail;
 
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -208,7 +205,7 @@ export class PersonDetailPage {
 
   constructor() {
     effect(() => {
-      this.personsResources.setPersonId(this.id());
+      this.personApi.setPersonId(this.id());
     });
   }
 
@@ -224,6 +221,14 @@ export class PersonDetailPage {
 
   protected fullName(person: Person): string {
     return `${person.firstName} ${person.lastName}`;
+  }
+
+  protected goToEdit(personId: string): void {
+    if (!this.securityService.canEditPerson()) {
+      return;
+    }
+
+    void this.router.navigate(['/persons', personId, 'edit']);
   }
 
   protected deletePerson(person: Person): void {
@@ -258,8 +263,8 @@ export class PersonDetailPage {
             },
           );
 
-          this.personsResources.reloadPersons();
-          this.personsResources.reloadPersonsCount();
+          this.personApi.reloadPersons();
+          this.personApi.reloadPersonsCount();
           void this.router.navigate(['/persons']);
         },
         error: () => {

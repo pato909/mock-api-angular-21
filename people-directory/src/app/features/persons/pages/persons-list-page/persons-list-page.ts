@@ -7,9 +7,8 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { PersonsResources } from '../../data/persons-resources';
 import { PersonsListQuery } from '../../model/person-query.model';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
@@ -34,7 +33,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   selector: 'app-persons-list-page',
   imports: [
     MatButtonModule,
-    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     LoadingStateComponent,
@@ -189,24 +187,28 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
                 <th mat-header-cell *matHeaderCellDef>{{ 'common.actions' | translate }}</th>
                 <td mat-cell *matCellDef="let person">
                   <div class="flex gap-1">
-                    <a
+                    <button
                       mat-button
-                      [routerLink]="['/persons', person.id]"
+                      type="button"
                       [attr.aria-label]="
                         'persons.list.viewPerson' | translate: { name: fullName(person) }
                       "
                       [disabled]="!securityService.canViewPerson()"
-                      >{{ 'common.view' | translate }}</a
+                      (click)="goToDetail(person.id)"
                     >
-                    <a
+                      {{ 'common.view' | translate }}
+                    </button>
+                    <button
                       mat-button
-                      [routerLink]="['/persons', person.id, 'edit']"
+                      type="button"
                       [attr.aria-label]="
                         'persons.list.editPerson' | translate: { name: fullName(person) }
                       "
                       [disabled]="!securityService.canEditPerson()"
-                      >{{ 'common.edit' | translate }}</a
+                      (click)="goToEdit(person.id)"
                     >
+                      {{ 'common.edit' | translate }}
+                    </button>
                     <button
                       mat-button
                       type="button"
@@ -255,11 +257,10 @@ export class PersonsListPage {
     limit: 10,
   });
 
-  personsResources = inject(PersonsResources);
   personApi = inject(PersonsApiService);
 
-  protected readonly persons = this.personsResources.personsList;
-  protected readonly countResource = this.personsResources.personsCount;
+  protected readonly persons = this.personApi.personsList;
+  protected readonly countResource = this.personApi.personsCount;
 
   displayedColumns = ['avatar', 'name', 'email', 'phone', 'birthDate', 'actions'];
 
@@ -295,7 +296,7 @@ export class PersonsListPage {
     });
 
     effect(() => {
-      this.personsResources.setListQuery(this.query());
+      this.personApi.setListQuery(this.query());
     });
   }
 
@@ -335,12 +336,28 @@ export class PersonsListPage {
   }
 
   protected retryPersonsList() {
-    this.personsResources.reloadPersons();
-    this.personsResources.reloadPersonsCount();
+    this.personApi.reloadPersons();
+    this.personApi.reloadPersonsCount();
   }
 
   protected goToCreate() {
     void this.router.navigateByUrl('/persons/new');
+  }
+
+  protected goToDetail(personId: string) {
+    if (!this.securityService.canViewPerson()) {
+      return;
+    }
+
+    void this.router.navigate(['/persons', personId]);
+  }
+
+  protected goToEdit(personId: string) {
+    if (!this.securityService.canEditPerson()) {
+      return;
+    }
+
+    void this.router.navigate(['/persons', personId, 'edit']);
   }
 
   protected deletePerson(person: Person) {
@@ -374,8 +391,8 @@ export class PersonsListPage {
               duration: 3000,
             },
           );
-          this.personsResources.reloadPersons();
-          this.personsResources.reloadPersonsCount();
+          this.personApi.reloadPersons();
+          this.personApi.reloadPersonsCount();
         },
         error: () => {
           this.snackBar.open(

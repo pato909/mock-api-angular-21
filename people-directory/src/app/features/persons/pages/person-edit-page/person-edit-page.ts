@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonFormPayload } from '../../model/person-form.model';
 import { PersonForm } from '../../ui/person-form/person-form';
 import { MatButtonModule } from '@angular/material/button';
-import { PersonsResources } from '../../data/persons-resources';
 import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
 import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
 import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
@@ -89,7 +88,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 export class PersonEditPage {
   readonly id = input.required<string>();
 
-  private readonly personsResources = inject(PersonsResources);
   private readonly personService = inject(PersonsApiService);
 
   private readonly router = inject(Router);
@@ -98,11 +96,11 @@ export class PersonEditPage {
 
   readonly isSubmitting = signal(false);
 
-  protected readonly person = this.personsResources.personDetail;
+  protected readonly person = this.personService.personDetail;
 
   constructor() {
     effect(() => {
-      this.personsResources.setPersonId(this.id());
+      this.personService.setPersonId(this.id());
     });
   }
 
@@ -123,7 +121,7 @@ export class PersonEditPage {
           },
         );
 
-        this.personsResources.reloadPersonDetail();
+        this.personService.reloadPersonDetail();
         void this.router.navigate(['/persons', person.id]);
       },
       error: () => {

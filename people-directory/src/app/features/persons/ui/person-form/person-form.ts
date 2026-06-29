@@ -174,6 +174,7 @@ export class PersonForm {
   readonly person = input<Person | undefined>(undefined);
 
   readonly isEditMode = computed(() => !!this.person());
+
   readonly form = new FormGroup({
     firstName: new FormControl('', {
       nonNullable: true,
