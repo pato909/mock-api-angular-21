@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
-import { PersonsApiService } from '../../data/persons-api.service';
+import { PersonsApiService } from '../shared/persons-api.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PersonFormPayload } from '../../model/person-form.model';
-import { PersonForm } from '../../ui/person-form/person-form';
+import { PersonFormPayload } from '../shared/person-form.model';
+import { PersonForm } from '../shared/ui/person-form/person-form';
 import { MatButtonModule } from '@angular/material/button';
-import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
-import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
-import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
+import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state';
+import { ErrorStateComponent } from '../../shared/ui/error-state/error-state';
+import { LoadingStateComponent } from '../../shared/ui/loading-state/loading-state';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({

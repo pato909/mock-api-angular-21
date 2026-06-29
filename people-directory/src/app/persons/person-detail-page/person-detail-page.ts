@@ -3,18 +3,18 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
-import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
+import { LoadingStateComponent } from '../../shared/ui/loading-state/loading-state';
+import { ErrorStateComponent } from '../../shared/ui/error-state/error-state';
 import { DatePipe } from '@angular/common';
-import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
-import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-dialog';
+import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state';
+import { DeletePersonDialog } from '../shared/ui/delete-person-dialog/delete-person-dialog';
 import { filter, finalize, switchMap, tap } from 'rxjs';
-import { Person } from '../../model/person.model';
+import { Person } from '../shared/person.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PersonsApiService } from '../../data/persons-api.service';
-import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
-import { SecurityService } from '../../../../core/security/security.service';
+import { PersonsApiService } from '../shared/persons-api.service';
+import { PersonAvatar } from '../shared/ui/person-avatar/person-avatar';
+import { SecurityService } from '../../core/security/security.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({

@@ -1,9 +1,9 @@
 import { HttpClient, httpResource, HttpResourceRef } from '@angular/common/http';
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { Person, PersonUpsertPayload } from '../model/person.model';
+import { Person, PersonUpsertPayload } from './person.model';
 import { Observable } from 'rxjs';
-import { API_BASE_URL } from '../../../core/api/api.config';
-import { PersonsListQuery } from '../model/person-query.model';
+import { API_BASE_URL } from '../../core/api/api.config';
+import { PersonsListQuery } from './person-query.model';
 
 @Injectable({
   providedIn: 'root',

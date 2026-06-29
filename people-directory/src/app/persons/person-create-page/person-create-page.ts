@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
-import { PersonForm } from '../../ui/person-form/person-form';
-import { PersonFormPayload } from '../../model/person-form.model';
-import { PersonsApiService } from '../../data/persons-api.service';
+import { PersonForm } from '../shared/ui/person-form/person-form';
+import { PersonFormPayload } from '../shared/person-form.model';
+import { PersonsApiService } from '../shared/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 

@@ -12,12 +12,12 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { PersonFormPayload } from '../../model/person-form.model';
+import { PersonFormPayload } from '../../person-form.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { notFutureDateValidator } from '../../../../shared/validators/date.validators';
 import { avatarUrlValidator } from '../../../../shared/validators/url.validators';
-import { Person } from '../../model/person.model';
+import { Person } from '../../person.model';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({

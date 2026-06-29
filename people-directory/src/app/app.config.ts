@@ -44,7 +44,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(withInterceptorsFromDi()),
-    provideAnimationsAsync(),
     provideRouter(routes, withComponentInputBinding()),
     { provide: MAT_DATE_LOCALE, useValue: 'fr-BE' },
     provideNativeDateAdapter(APP_DATE_FORMATS),

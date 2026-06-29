@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { UpperCasePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { SecurityService } from '../../../../core/security/security.service';
+import { SecurityService } from '../core/security/security.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({

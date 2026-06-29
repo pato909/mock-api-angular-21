@@ -7,26 +7,26 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { PersonsListQuery } from '../../model/person-query.model';
+import { PersonsListQuery } from '../shared/person-query.model';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoadingStateComponent } from '../../../../shared/ui/loading-state/loading-state';
-import { ErrorStateComponent } from '../../../../shared/ui/error-state/error-state';
-import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state';
+import { LoadingStateComponent } from '../../shared/ui/loading-state/loading-state';
+import { ErrorStateComponent } from '../../shared/ui/error-state/error-state';
+import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIcon } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { Person } from '../../model/person.model';
+import { Person } from '../shared/person.model';
 import { MatDialog } from '@angular/material/dialog';
-import { DeletePersonDialog } from '../../ui/delete-person-dialog/delete-person-dialog';
+import { DeletePersonDialog } from '../shared/ui/delete-person-dialog/delete-person-dialog';
 import { filter, finalize, switchMap, tap } from 'rxjs';
-import { PersonsApiService } from '../../data/persons-api.service';
+import { PersonsApiService } from '../shared/persons-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PersonAvatar } from '../../ui/person-avatar/person-avatar';
-import { SecurityService } from '../../../../core/security/security.service';
+import { PersonAvatar } from '../shared/ui/person-avatar/person-avatar';
+import { SecurityService } from '../../core/security/security.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
